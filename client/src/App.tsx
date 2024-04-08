@@ -7,7 +7,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import Login from "./Login"
+import Login from "./Login/Login"
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
