@@ -17,7 +17,7 @@ export const router = createBrowserRouter(
     [
       <Route path="/" element={<Navigate replace to="/login" />} />,
       <Route path="/login" element={<Login />} />,
-      <Route path="/home" element={<Home />} />,
+      <Route path="/users" element={<Home />} />,
     ],
   ),
 );

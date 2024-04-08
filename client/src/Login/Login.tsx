@@ -21,7 +21,7 @@ const Login = () => {
 
     const handleLogin = () => {
         if (code === password && phoneNumber)
-            navigate("/home");
+            navigate("/users");
         else {
             setErrorMessage("סיסמא או מספר פלאפון לא נכונים")
         }
