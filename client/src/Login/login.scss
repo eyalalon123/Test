@@ -1,5 +1,50 @@
+.login_page {
 
-.login-inputs-container{
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+    align-items: center;
+    background-color: rgb(13, 121, 121);
+    justify-content: center;
+
+    .login_inputs_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 20%;
+        height: 20%;
+        text-align: center;
+        gap: 20px;
+
+        .text_username,
+        .text_password {
+            font-size: 1.3rem;
+            height: fit-content;
+        }
+
+        .phone_input,
+        .code_input {
+            width: 100%;
+            height: 15%;
+            border: 2px solid rgb(161, 138, 138);
+            text-align: right;
+        }
+
+        .error_message {
+            color: #9d1a00;
+            height: 0.1vh;
+            margin-top: -20px;
+            font-size: 15px;
+            align-self: flex-end;
+            text-align: right;
+        }
+    }
+
+    .login_button {
+        background-color: antiquewhite;
+        margin-top: 1%;
+        width: 12%;
+        height: 3.5vh;
+    }
 }
