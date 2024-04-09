@@ -1,5 +1,5 @@
 export class usersDTO {
-    _id?: string;
+    _id?: number;
     name: string;
     phoneNumber: string
 }

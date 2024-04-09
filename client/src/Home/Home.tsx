@@ -4,7 +4,7 @@ const Home = () => {
 
     async function handleUsers() {
         try {
-            const response = await axios.get("http://localhost:5000/users");
+            const response = await axios.get("http://localhost:8000/users");
             console.log(response.data);
         } catch (error) {
             console.error("Error fetching users:", error);
@@ -13,7 +13,9 @@ const Home = () => {
 
     return (
         <>
-            <button onClick={handleUsers}>Fetch Users</button>
+            <div>
+                <button onClick={handleUsers}>Fetch Users</button>
+            </div>
         </>
     );
 };
