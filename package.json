@@ -3,6 +3,8 @@
     "vite": "^5.2.7"
   },
   "dependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "react-router-dom": "^6.22.3"
   }
 }

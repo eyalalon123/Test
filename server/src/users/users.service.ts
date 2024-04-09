@@ -32,4 +32,22 @@ export class UsersService {
     getUser(id: number): usersDTO {
         return this.users.find(x => x._id == id)
     }
+
+    addUser(newUser: usersDTO) {
+        this.users.push(newUser);
+    }
+
+    updateUser(id: number, user: usersDTO) {
+        let index = this.users.findIndex(x => x._id == id)
+        if (index >= 0) {
+            this.users[index] = user
+        }
+    }
+
+    deleteUser(id: number) {
+        let index = this.users.findIndex(x => x._id == id)
+        if (index >= 0) {
+            this.users.splice(index, 1)
+        }
+    }
 }
