@@ -1,53 +1,31 @@
 import { Injectable } from '@nestjs/common';
-import { usersDTO } from './DTO/user.dto';
+import { InjectModel } from '@nestjs/mongoose';
+import { Model } from 'mongoose';
+import { updateUserDTO, usersDTO } from './DTO/user.dto';
+import { Users } from './schemas/user.shcema';
 
 @Injectable()
 export class UsersService {
-    users: usersDTO[] = [];
-    constructor() {
-        const user1: usersDTO = new usersDTO();
-        user1._id = 1;
-        user1.name = "eyal";
-        user1.phoneNumber = "0586537099"
+    constructor(@InjectModel(Users.name) private readonly UsersModel: Model<Users>) { }
 
-        const user2: usersDTO = new usersDTO();
-        user2._id = 2;
-        user2.name = "hadar";
-        user2.phoneNumber = "0547657899"
-
-        const user3: usersDTO = new usersDTO();
-        user3._id = 3;
-        user3.name = "alon";
-        user3.phoneNumber = "0587335877"
-
-        this.users.push(user1)
-        this.users.push(user2)
-        this.users.push(user3)
+    createUser(usersDTO: usersDTO) {
+        const newUser = new this.UsersModel(usersDTO);
+        return newUser.save();
     }
 
-    getAllUsers(): usersDTO[] {
-        return this.users
+    getAllUsers() {
+        return this.UsersModel.find()
     }
 
-    getUser(id: number): usersDTO {
-        return this.users.find(x => x._id == id)
+    getUserById(id: string) {
+        return this.UsersModel.findById(id)
     }
 
-    addUser(newUser: usersDTO) {
-        this.users.push(newUser);
+    updateUser(id: string, updateUserDTO: updateUserDTO) {
+        return this.UsersModel.findByIdAndUpdate(id, updateUserDTO, { new: true })
     }
 
-    updateUser(id: number, user: usersDTO) {
-        let index = this.users.findIndex(x => x._id == id)
-        if (index >= 0) {
-            this.users[index] = user
-        }
-    }
-
-    deleteUser(id: number) {
-        let index = this.users.findIndex(x => x._id == id)
-        if (index >= 0) {
-            this.users.splice(index, 1)
-        }
+    deleteUser(id: string) {
+        return this.UsersModel.findByIdAndDelete(id)
     }
 }

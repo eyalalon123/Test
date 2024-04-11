@@ -1,5 +1,5 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put } from '@nestjs/common';
-import { usersDTO } from './DTO/user.dto';
+import { Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { updateUserDTO, usersDTO } from './DTO/user.dto';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -7,31 +7,32 @@ export class UsersController {
 
     constructor(private userService: UsersService) { }
 
+    @Post()
+    @UsePipes(new ValidationPipe())
+    creatUser(@Body() usersDTO: usersDTO) {
+        return this.userService.createUser(usersDTO);
+    }
+
     @Get()
-    getUsers() {
-        return this.userService.getAllUsers();
+    getAllUsers() {
+        return this.userService.getAllUsers()
     }
 
     @Get(':id')
-    getUser(@Param('id', ParseIntPipe) userId: number) {
-        return this.userService.getUser(userId);
+    async getUserById(@Param('id') id: string) {
+        const findUser = await this.userService.getUserById(id)
+        if (!findUser) { throw new HttpException('user not found', 404) };
+        return findUser;
     }
 
-    @Post()
-    addUser(@Body() newUser: usersDTO) {
-        this.userService.addUser(newUser)
-        return "Created !"
-    }
-
-    @Put(':id')
-    updateUser(@Body() user: usersDTO, @Param('id') userId: number) {
-        this.userService.updateUser(userId, user)
-        return "updated !"
+    @Patch(':id')
+    @UsePipes(new ValidationPipe())
+    updateUser(@Param('id') id: string, @Body() updateUserDTO: updateUserDTO) {
+        return this.userService.updateUser(id, updateUserDTO)
     }
 
     @Delete(':id')
-    deleteUser(@Param('id') userId: number) {
-        this.userService.deleteUser(userId)
-        return "deleted !"
+    deleteUser(@Param('id') id: string) {
+        return this.userService.deleteUser(id)
     }
 }
