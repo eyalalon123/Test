@@ -8,9 +8,20 @@ import { Users } from './schemas/user.shcema';
 export class UsersService {
     constructor(@InjectModel(Users.name) private readonly UsersModel: Model<Users>) { }
 
-    createUser(usersDTO: usersDTO) {
-        const newUser = new this.UsersModel(usersDTO);
-        return newUser.save();
+
+    async createUser(usersDTO: usersDTO) {
+        try {
+            const existingPhoneNumber = await this.UsersModel.findOne({ phoneNumber: usersDTO.phoneNumber });
+
+            if (existingPhoneNumber) {
+                throw new Error("User with the same phone number already exists");
+            } else {
+                const newUser = new this.UsersModel(usersDTO);
+                return newUser.save();
+            }
+        } catch (error) {
+            throw error;
+        }
     }
 
     getAllUsers() {
@@ -21,9 +32,15 @@ export class UsersService {
         return this.UsersModel.findById(id)
     }
 
-    updateUser(id: string, updateUserDTO: updateUserDTO) {
-        return this.UsersModel.findByIdAndUpdate(id, updateUserDTO, { new: true })
+    async updateUser(id: string, updateUserDTO: updateUserDTO) {
+        const existingPhoneNumber = await this.UsersModel.findOne({ phoneNumber: updateUserDTO.phoneNumber });
+    
+        if (existingPhoneNumber && existingPhoneNumber._id.toString() !== id) {
+            throw new Error('Phone number already exists');
+        }
+        return await this.UsersModel.findByIdAndUpdate(id, updateUserDTO, { new: true });
     }
+    
 
     deleteUser(id: string) {
         return this.UsersModel.findByIdAndDelete(id)
