@@ -9,7 +9,7 @@ export class studentsService {
     constructor(@InjectModel(Students.name) private readonly studentsModel: Model<Students>) { }
 
 
-    async createStudent(studentDTO: studentDTO) {
+    createStudent(studentDTO: studentDTO) {
         const newStudent = new this.studentsModel(studentDTO);
         return newStudent.save();
     }
