@@ -2,11 +2,12 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class testsDTO {
 
-    @IsNotEmpty()
-    name: string;
+    @IsOptional()
+    name?: string;
 
     @IsNumber()
-    grade: number;
+    @IsOptional()
+    grade?: number;
 
 }
 
