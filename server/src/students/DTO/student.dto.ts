@@ -24,12 +24,9 @@ export class studentDTO {
 
 export class updateStudentDTO {
 
-    @IsOptional()
     @IsString()
     name?: string;
 
-    @IsOptional()
-    @IsObject()
     @ValidateNested()
     @Type(() => CreateTestDTO)
     tests?: CreateTestDTO

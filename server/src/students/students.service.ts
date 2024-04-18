@@ -13,17 +13,14 @@ export class studentsService {
     ) { }
 
 
-    async createStudent({ tests, ...studentDTO }: studentDTO) {
+    async createStudent(student: studentDTO) {
+        const { tests } = student;
         if (tests) {
             const newTests = new this.testsModel(tests);
-            const savedNewTests = await newTests.save();
-            const newStudent = new this.studentsModel({
-                ...studentDTO,
-                tests: savedNewTests,
-            })
-            return newStudent.save();
+            const test = await newTests.save();
+            student.tests = test;
         }
-        const newStudent = new this.studentsModel(studentDTO);
+        const newStudent = new this.studentsModel(student);
         return newStudent.save();
     }
 
@@ -35,8 +32,22 @@ export class studentsService {
         return this.studentsModel.findById(id).populate('tests');
     }
 
-    updateStudent(id: string, updateStudentDTO: updateStudentDTO) {
-        return this.studentsModel.findByIdAndUpdate(id, updateStudentDTO, { new: true })
+    async updateStudent(id: string, updateStudentDTO: updateStudentDTO) {
+        const { tests, ...updateData } = updateStudentDTO;
+
+        if (tests) {
+            await this.studentsModel.findByIdAndUpdate(
+                id,
+                { $set: tests },
+                { new: true }
+            );
+        }
+        const updatedStudent = await this.studentsModel.findByIdAndUpdate(
+            id,
+            { $set: updateData },
+            { new: true }
+        ).populate('tests');
+        return updatedStudent;
     }
 
     deleteStudent(id: string) {

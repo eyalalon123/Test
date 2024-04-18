@@ -2,6 +2,7 @@ import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
 
 export class testsDTO {
 
+    @IsString()
     @IsOptional()
     name?: string;
 
@@ -17,6 +18,6 @@ export class updateTestsDTO {
     name?: string;
 
     @IsNumber()
-    grade?: string;
+    grade?: number;
 
 }

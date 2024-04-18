@@ -11,7 +11,13 @@ export class Students {
     @Prop({ type: String, required: true })
     name: string;
 
-    @Prop({ type: Object, ref: 'Tests', required: false })
+    @Prop({
+        type: {
+            _id: mongoose.Schema.Types.ObjectId,
+            name: String,
+            grade: Number
+        }, ref: 'Tests', required: false
+    })
     tests?: Tests;
 }
 
