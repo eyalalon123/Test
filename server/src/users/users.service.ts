@@ -11,6 +11,12 @@ export class UsersService {
 
     async createUser(usersDTO: usersDTO) {
         try {
+            const phoneNumberRegex = /^\d{10}$/;
+
+            if (!phoneNumberRegex.test(usersDTO.phoneNumber)) {
+                throw new Error("Phone number must be 10 digits and consist only of numbers");
+            }
+
             const existingPhoneNumber = await this.UsersModel.findOne({ phoneNumber: usersDTO.phoneNumber });
 
             if (existingPhoneNumber) {
@@ -34,13 +40,13 @@ export class UsersService {
 
     async updateUser(id: string, updateUserDTO: updateUserDTO) {
         const existingPhoneNumber = await this.UsersModel.findOne({ phoneNumber: updateUserDTO.phoneNumber });
-    
+
         if (existingPhoneNumber && existingPhoneNumber._id.toString() !== id) {
             throw new Error('Phone number already exists');
         }
         return await this.UsersModel.findByIdAndUpdate(id, updateUserDTO, { new: true });
     }
-    
+
 
     deleteUser(id: string) {
         return this.UsersModel.findByIdAndDelete(id)
