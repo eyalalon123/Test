@@ -1,44 +1,26 @@
-import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { Model } from 'mongoose';
-import { updateUserDTO, usersDTO } from './DTO/user.dto';
+
+import { updateUserDTO, userDTO } from './DTO/user.dto';
 import { Users } from './schemas/user.shcema';
 
 @Injectable()
 export class UsersService {
     constructor(@InjectModel(Users.name) private readonly UsersModel: Model<Users>) { }
 
-
-    async createUser(usersDTO: usersDTO) {
+    async createUser(user: userDTO) {
         try {
-            const phoneNumberRegex = /^\d{10}$/;
-            const passwordValidation = /^\d{6}$/;
-            const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
-
-            if (!phoneNumberRegex.test(usersDTO.phoneNumber)) {
-                throw new Error("Phone number must be 10 digits and consist only of numbers");
-            }
-            if (!passwordValidation.test(usersDTO.password)) {
-                throw new Error("password must be only numbers");
-            }
-            if (!usernameRegex.test(usersDTO.name)) {
-                throw new Error("name must be 3-20 characters long and can only contain letters, numbers, and underscores");
-            }
-
             // Check for unique phone number
-            const existingPhoneNumber = await this.UsersModel.findOne({ phoneNumber: usersDTO.phoneNumber });
-            if (existingPhoneNumber) {
-                throw new Error("User with the same phone number already exists");
-            }
+            const isExist = await this.UsersModel.findOne({ phoneNumber: user.phoneNumber });
+            if (isExist) throw new BadRequestException('User with the same phone number already exists');
 
-
-            const newUser = new this.UsersModel(usersDTO);
+            const newUser = new this.UsersModel(user);
             return newUser.save();
         } catch (error) {
-            throw error;
+            throw new BadRequestException('User with the same phone number already exists');
         }
     }
-
 
     getAllUsers() {
         return this.UsersModel.find()

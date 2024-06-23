@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from 'axios';
-import "./home.scss";
+import "./RegisterPage.scss";
 
 interface User {
     name: string;
@@ -9,7 +9,7 @@ interface User {
     password: string;
 }
 
-const Home = () => {
+const RegisterPage = () => {
 
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
 
@@ -47,6 +47,7 @@ const Home = () => {
                     type="text"
                     name="name"
                     placeholder="Name"
+                    maxLength={20}
                     value={formData.name}
                     onChange={handleInputChange}
                 />
@@ -62,7 +63,7 @@ const Home = () => {
                     type="password"
                     name="password"
                     placeholder="password"
-                    maxLength={6}
+                    maxLength={20}
                     value={formData.password}
                     onChange={handleInputChange}
                 />
@@ -81,4 +82,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default RegisterPage;

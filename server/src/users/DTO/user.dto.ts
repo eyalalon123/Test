@@ -1,14 +1,25 @@
-import { IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsNotEmpty, IsOptional, IsString, Matches, Length} from "class-validator";
 
-export class usersDTO {
+export class userDTO {
 
     @IsNotEmpty()
+    @Length(3,20)
+    @Matches(/^[a-zA-Z]+$/,{
+        message: 'Name must consist of letters only'
+    })
     name: string;
 
     @IsNotEmpty()
+    @Length(10)
+    @Matches(/^\d+$/, {
+        message: "Phone number must be a 10 digit number"
+    })
     phoneNumber: string
 
     @IsNotEmpty()
+    @Matches(/^(?=.*[a-zA-Z])(?=.*\d)[a-zA-Z\d]{8,16}$/, {
+        message: 'Password must include at least one uppercase letter, one lowercase letter and one number'
+    })
     password: string
 }
 

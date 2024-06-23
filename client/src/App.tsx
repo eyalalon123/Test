@@ -6,12 +6,12 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from "react-router-dom";
-import Home from "./pages/Home/Home";
 
+import RegisterPage from "./pages/Home/RegisterPage";
 import Login from "./pages/Login/Login"
+import Page_404 from "./pages/404-Page/404";
 
 import "./App.scss"
-import Page_404 from "./pages/404-Page/404";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -19,7 +19,7 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Navigate replace to="/login" />} />,
       <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
-      <Route path="/users" element={<Home />} />,
+      <Route path="/users" element={<RegisterPage />} />,
     ],
   ),
 );
