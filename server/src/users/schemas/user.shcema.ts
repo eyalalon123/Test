@@ -8,6 +8,9 @@ export class Users {
 
     @Prop({ type: String, required: true })
     phoneNumber: string;
+
+    @Prop({ type: String, required: true})
+    password: string;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

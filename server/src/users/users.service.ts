@@ -12,12 +12,15 @@ export class UsersService {
     async createUser(usersDTO: usersDTO) {
         try {
             const phoneNumberRegex = /^\d{10}$/;
+            const passwordValidation = /^\d{6}$/;
             const usernameRegex = /^[a-zA-Z0-9_]{3,20}$/;
 
             if (!phoneNumberRegex.test(usersDTO.phoneNumber)) {
                 throw new Error("Phone number must be 10 digits and consist only of numbers");
             }
-
+            if (!passwordValidation.test(usersDTO.password)) {
+                throw new Error("password must be only numbers");
+            }
             if (!usernameRegex.test(usersDTO.name)) {
                 throw new Error("name must be 3-20 characters long and can only contain letters, numbers, and underscores");
             }
@@ -27,6 +30,7 @@ export class UsersService {
             if (existingPhoneNumber) {
                 throw new Error("User with the same phone number already exists");
             }
+
 
             const newUser = new this.UsersModel(usersDTO);
             return newUser.save();

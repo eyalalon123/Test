@@ -6,11 +6,12 @@ import "./home.scss";
 interface User {
     name: string;
     phoneNumber: string;
+    password: string;
 }
 
 const Home = () => {
 
-    const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "" });
+    const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
 
     const { data, isLoading, refetch } = useQuery({
         queryKey: ["users"],
@@ -23,7 +24,7 @@ const Home = () => {
             axios.post('http://localhost:8000/users', newUser),
         onSuccess: () => {
             refetch();
-            setFormData({ name: "", phoneNumber: "" });
+            setFormData({ name: "", phoneNumber: "", password: "" });
         }
     });
 
@@ -57,15 +58,23 @@ const Home = () => {
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                 />
+                <input
+                    type="password"
+                    name="password"
+                    placeholder="password"
+                    maxLength={6}
+                    value={formData.password}
+                    onChange={handleInputChange}
+                />
                 {isLoading && <p className="loading-data">loading...</p>}
                 {isError && <p className="error-data">error in the data</p>}
                 {isPending && <p className="pending-data">data is added</p>}
             </div>
-            <button className="button-handle-users" onClick={handleSubmit}>Add User</button>
+            <button className="button-handle-users" onClick={handleSubmit}>register</button>
             <div className="data-container">
                 <h3>users:</h3>
                 {data && data.map((user: User, index: number) => (
-                    <p key={index}>name: {user.name} - phoneNumber: {user.phoneNumber}</p>
+                    <p key={index}>name: {user.name} - phoneNumber: {user.phoneNumber} - password: {user.password}</p>
                 ))}
             </div>
         </div>

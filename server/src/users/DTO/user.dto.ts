@@ -7,6 +7,9 @@ export class usersDTO {
 
     @IsNotEmpty()
     phoneNumber: string
+
+    @IsNotEmpty()
+    password: string
 }
 
 export class updateUserDTO {
@@ -18,4 +21,8 @@ export class updateUserDTO {
     @IsOptional()
     @IsString()
     phoneNumber?: string
+
+    @IsOptional()
+    @IsString()
+    password?: string
 }
