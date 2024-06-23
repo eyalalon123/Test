@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useState, ChangeEvent } from "react";
 
-import "../Login/login.scss"
+import "./login.scss"
 
 const Login = () => {
     const navigate = useNavigate();

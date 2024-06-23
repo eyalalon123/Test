@@ -1,0 +1,27 @@
+.not-found-page-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+
+    .message-404 {
+        height: 20vh;
+        font-size: 2rem;
+        color: #333;
+    }
+
+    .button-404 {
+        width: 10vw;
+        height: 10vh;
+        background-color: #344961;
+        color: white;
+        border: none;
+        border-radius: 0.25rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
+
+    .button-404:hover {
+        background-color: #0056b3;
+    }
+}
