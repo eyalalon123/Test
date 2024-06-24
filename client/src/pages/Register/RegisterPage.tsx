@@ -18,8 +18,6 @@ const RegisterPage = () => {
 
     const { isLoading, refetch } = useQuery({
         queryKey: ["users"],
-        queryFn: () =>
-            fetch('http://localhost:8000/auth').then(res => res.json())
     });
 
     const { mutate, isPending, isError } = useMutation({
