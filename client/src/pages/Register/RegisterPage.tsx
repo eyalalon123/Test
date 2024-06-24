@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
 import axios from 'axios';
+import { useNavigate } from "react-router-dom";
+
 import "./RegisterPage.scss";
 
 interface User {
@@ -12,6 +14,7 @@ interface User {
 const RegisterPage = () => {
 
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
+    const navigate = useNavigate();
 
     const { data, isLoading, refetch } = useQuery({
         queryKey: ["users"],
@@ -24,6 +27,7 @@ const RegisterPage = () => {
             axios.post('http://localhost:8000/users', newUser),
         onSuccess: () => {
             refetch();
+            navigate('/login')
             setFormData({ name: "", phoneNumber: "", password: "" });
         }
     });
@@ -70,14 +74,14 @@ const RegisterPage = () => {
                 {isLoading && <p className="loading-data">loading...</p>}
                 {isError && <p className="error-data">error in the data</p>}
                 {isPending && <p className="pending-data">data is added</p>}
+                <button className="button-handle-users" onClick={handleSubmit}>register</button>
             </div>
-            <button className="button-handle-users" onClick={handleSubmit}>register</button>
-            <div className="data-container">
+            {/* <div className="data-container">
                 <h3>users:</h3>
                 {data && data.map((user: User, index: number) => (
                     <p key={index}>name: {user.name} - phoneNumber: {user.phoneNumber} - password: {user.password}</p>
                 ))}
-            </div>
+            </div> */}
         </div>
     );
 };

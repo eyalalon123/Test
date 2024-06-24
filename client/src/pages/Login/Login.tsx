@@ -18,7 +18,7 @@ const Login = () => {
     };
 
     const handleLogin = () => {
-        navigate('/users')
+        navigate('/home')
     };
 
     return (
@@ -41,9 +41,9 @@ const Login = () => {
                         maxLength={6}
                         onChange={handleCodeInput}
                         value={code} />
+                    <button className="login_button" onClick={handleLogin}>התחבר</button>
+                    <button className="login_button" onClick={() => navigate('/register')}>הרשמה</button>
                 </div>
-                <button className="login_button" onClick={handleLogin}>התחבר</button>
-                <button className="login_button" onClick={() => navigate('/users')}>הרשמה</button>
             </div>
         </>
     );
