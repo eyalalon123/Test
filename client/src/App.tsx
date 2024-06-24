@@ -18,8 +18,8 @@ export const router = createBrowserRouter(
   createRoutesFromElements(
     [
       <Route path="/" element={<Navigate replace to="/login" />} />,
-      <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
+      <Route path="/*" element={<Page_404 />} />,
       <Route path="/register" element={<RegisterPage />} />,
       <Route path="/home" element={<HomePage />} />,
     ],

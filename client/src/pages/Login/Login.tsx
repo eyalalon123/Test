@@ -10,7 +10,6 @@ const Login = () => {
 
     const handlePhoneInput = (e: ChangeEvent<HTMLInputElement>) => {
         setPhoneNumber(e.target.value);
-
     };
 
     const handleCodeInput = (e: ChangeEvent<HTMLInputElement>) => {

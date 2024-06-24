@@ -16,15 +16,15 @@ const RegisterPage = () => {
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
     const navigate = useNavigate();
 
-    const { data, isLoading, refetch } = useQuery({
+    const { isLoading, refetch } = useQuery({
         queryKey: ["users"],
         queryFn: () =>
-            fetch('http://localhost:8000/users').then(res => res.json())
+            fetch('http://localhost:8000/auth').then(res => res.json())
     });
 
     const { mutate, isPending, isError } = useMutation({
         mutationFn: (newUser: User) =>
-            axios.post('http://localhost:8000/users', newUser),
+            axios.post('http://localhost:8000/auth/register', newUser),
         onSuccess: () => {
             refetch();
             navigate('/login')
@@ -76,12 +76,6 @@ const RegisterPage = () => {
                 {isPending && <p className="pending-data">data is added</p>}
                 <button className="button-handle-users" onClick={handleSubmit}>register</button>
             </div>
-            {/* <div className="data-container">
-                <h3>users:</h3>
-                {data && data.map((user: User, index: number) => (
-                    <p key={index}>name: {user.name} - phoneNumber: {user.phoneNumber} - password: {user.password}</p>
-                ))}
-            </div> */}
         </div>
     );
 };
