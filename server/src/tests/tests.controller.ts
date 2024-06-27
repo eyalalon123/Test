@@ -1,8 +1,9 @@
-import { Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patch, Post, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patch, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { testsDTO, updateTestsDTO } from './DTO/tests.dto';
 import { testsService } from './tests.service';
 
-@Controller('tests')
+@Controller('api/tests')
 export class testsController {
 
     constructor(private testsService: testsService) { }
@@ -14,6 +15,7 @@ export class testsController {
     }
 
     @Get()
+    @UseGuards(AuthGuard)
     getAlltests() {
         return this.testsService.getAllTests()
     }

@@ -22,7 +22,7 @@ const RegisterPage = () => {
 
     const { mutate, isPending, isError } = useMutation({
         mutationFn: (newUser: User) =>
-            axios.post('http://localhost:8000/auth/register', newUser),
+            axios.post('/api/auth/register', newUser),
         onSuccess: () => {
             refetch();
             navigate('/login')

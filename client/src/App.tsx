@@ -14,15 +14,16 @@ import Page_404 from "./pages/404-Page/404";
 
 import "./App.scss"
 
+
 export const router = createBrowserRouter(
   createRoutesFromElements(
     [
       <Route path="/" element={<Navigate replace to="/login" />} />,
-      <Route path="/login" element={<Login />} />,
       <Route path="/*" element={<Page_404 />} />,
+      <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
-      <Route path="/home" element={<HomePage />} />,
-    ],
+      <Route path="/home" element={<HomePage />}
+      />,],
   ),
 );
 

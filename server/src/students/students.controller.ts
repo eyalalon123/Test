@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patc
 import { studentDTO, updateStudentDTO } from './DTO/student.dto';
 import { studentsService } from './students.service';
 
-@Controller('students')
+@Controller('api/students')
 export class studentsController {
 
     constructor(private studentservice: studentsService) { }

@@ -17,7 +17,7 @@ const Login = () => {
 
     const { mutate } = useMutation({
         mutationFn: (newUser: User) =>
-            axios.post('http://localhost:8000/auth/login', newUser),
+            axios.post('/api/auth/login', newUser,),
         onSuccess: (data) => {
             const token = data.data.token;
             localStorage.setItem('token', token);
