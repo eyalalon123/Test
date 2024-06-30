@@ -17,4 +17,8 @@ export class GameController {
         return this.gameService.getAllData()
     }
 
+    @Get(':id/:letter')
+    async getLetterInEretz(@Param('id') id: string, @Param('letter') letter: string) {
+        return this.gameService.findLetterInEretzById(id, letter);
+    }
 }
