@@ -1,28 +1,43 @@
-import axios from 'axios';
 import { useQuery } from '@tanstack/react-query';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import "./homePage.scss"
 
-interface Tests {
+interface Users {
     name: string;
 }
 
 const HomePage = () => {
+
+    const navigate = useNavigate();
+
+    const fetchTests = async () => {
+        try {
+            const response = await axios.get('/api/users', {
+                withCredentials: true,
+            });
+            return response.data;
+        } catch (error) {
+            if (axios.isAxiosError(error) && error.response?.status === 401) {
+                navigate('/login');
+            }
+            throw error;
+        }
+    };
+
     const { data, isLoading } = useQuery({
-        queryKey: ["tests"],
-        queryFn: () => axios.get('/api/tests', {
-            withCredentials: true,
-        }).then(res => res.data),
+        queryKey: ["users"],
+        queryFn: fetchTests,
     });
 
     if (isLoading) return <div>Loading...</div>;
 
     return (
         <div className="home-page">
-            <h1>Welcome to the Home Page</h1>
             <div className="data-container">
-                {data && data.map((tests: Tests, index: number) => (
-                    <p key={index}>Name: {tests.name}</p>
+                {data && data.map((users: Users, index: number) => (
+                    <h2 key={index}>Welcome to the Home Page {users.name}</h2>
                 ))}
             </div>
         </div>

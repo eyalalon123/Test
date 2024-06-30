@@ -16,7 +16,7 @@ const RegisterPage = () => {
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
     const navigate = useNavigate();
 
-    const { isLoading, refetch } = useQuery({
+    const { refetch } = useQuery({
         queryKey: ["users"],
     });
 
@@ -69,7 +69,6 @@ const RegisterPage = () => {
                     value={formData.password}
                     onChange={handleInputChange}
                 />
-                {isLoading && <p className="loading-data">loading...</p>}
                 {isError && <p className="error-data">error in the data</p>}
                 {isPending && <p className="pending-data">data is added</p>}
                 <button className="button-handle-users" onClick={handleSubmit}>register</button>
