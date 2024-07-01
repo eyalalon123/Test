@@ -1,9 +1,8 @@
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import axios from 'axios';
 
 import "./login.scss";
+import { useUserContext } from "../../common/context/userContext";
 
 interface User {
     phoneNumber: string;
@@ -12,22 +11,9 @@ interface User {
 
 const Login = () => {
     const navigate = useNavigate();
+    const { login, fetchStatus, isLoggedIn } = useUserContext();
     const [formData, setFormData] = useState<User>({ phoneNumber: "", password: "" });
     const [error, setError] = useState<string>("");
-
-    const { mutate } = useMutation({
-        mutationFn: (newUser: User) =>
-            axios.post('/api/auth/login', newUser,),
-        onSuccess: (data) => {
-            const token = data.data.token;
-            localStorage.setItem('token', token);
-            navigate('/home');
-            setFormData({ phoneNumber: "", password: "" });
-        },
-        onError: () => {
-            setError("Invalid phone number or password");
-        }
-    });
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -37,10 +23,25 @@ const Login = () => {
         }));
     };
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         setError("");
-        mutate(formData);
+        login(formData, {
+            onSuccess: () => {
+                navigate("/home");
+            },
+            onError: () => {
+                setError("Phone number or password in incorrect");
+            }
+        });
     };
+
+    if (fetchStatus === "pending") {
+        return null; //return loading | landing
+    }
+
+    if (isLoggedIn()) {
+        return <Navigate to="/home" />
+    }
 
     return (
         <>
