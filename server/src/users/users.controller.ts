@@ -1,4 +1,5 @@
 import { Body, Controller, Delete, Get, HttpException, Param, ParseIntPipe, Patch, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AuthGuard } from 'src/auth/auth.guard';
 import { updateUserDTO, userDTO } from './DTO/user.dto';
 import { UsersService } from './users.service';
 
@@ -19,6 +20,7 @@ export class UsersController {
     }
 
     @Get(':id')
+    // @UseGuards(AuthGuard)
     async getUserById(@Param('id') id: string) {
         const findUser = await this.userService.getUserById(id)
         if (!findUser) { throw new HttpException('user not found', 404) };

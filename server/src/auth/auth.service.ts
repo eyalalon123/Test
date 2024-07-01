@@ -17,13 +17,17 @@ export class AuthService {
 
     async register(registerDTO: registerDTO) {
         const { name, phoneNumber, password } = registerDTO
+        //bcrypt is a very easy-to-hack library with a low security standart, recomended to use something else (NS)
         const hashedPassword = await bcrypt.hash(password, 10)
 
-        const user = await this.AuthModule.create({
+        await this.AuthModule.create({
             name,
             phoneNumber,
             password: hashedPassword
         })
+
+        //where is your error handleing?!?!?
+        //it is not recomended to keep the user in a vaiable, just dont declare it for security reasons (NS)
         return true
     }
 
@@ -36,12 +40,41 @@ export class AuthService {
         const isPasswordMatched = await bcrypt.compare(password, user.password)
         if (!isPasswordMatched) throw new UnauthorizedException('Invalid phone number or password');
 
-        const token = this.JwtService.sign({ id: user._id, }, {
-            secret: 'nisim'
-        })
+        //better, shorter, and a more scaleable solution below (NS)
+        // if(!user || !(await bcrypt.compare(password, user.password))) {
+        //     throw new UnauthorizedException('Invalid phone number or password');
+        // }
+
+        const token = this.JwtService.sign({ id: user._id, });
+        console.log('token: ', token);
+
+        //don't call the token cookie 'token', it is too easy for hackers to know to steel this cookie (NS)
         res.cookie('token', token, {
-            maxAge: 1000 * 60 * 60 * 8 // 8 hours in ms
+            maxAge: parseFloat(process.env.JWT_EXPIRES.replace("d", "")) * 24 * 60 * 60 * 1000
         })
-        return res;
+    }
+
+    getAllUsers() {
+        //You are returning the passwords of all your users, you are aware of that? (NS)
+        return this.AuthModule.find()
+    }
+
+    async getUserById(id: string) {
+        //Make sure to omit the password from here aswell... perhaps use a middleware that makes sure that you never
+        //accidently return passwords to the user.... (NS)
+        return { user: await this.AuthModule.findById(id) }
+    }
+
+    async signInUserByToken(token?: string) {
+        try {
+            if (!token) throw null;
+            this.JwtService.verify(token);
+        } catch (e) {
+            throw new UnauthorizedException("Bad token");
+        }
+
+        const { id } = this.JwtService.decode(token);
+
+        return await this.getUserById(id);
     }
 }

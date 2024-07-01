@@ -70,31 +70,31 @@ export class Letters {
 
 @Schema({ versionKey: false })
 export class Category {
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     ארץ: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     עיר: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     חי: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     צומח: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     דומם: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     ילד: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     ילדה: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     מקצוע: Letters;
 
-    @Prop({ type: Letters, required: true })
+    @Prop({ type: Letters})
     מפורסם: Letters;
 }
 
