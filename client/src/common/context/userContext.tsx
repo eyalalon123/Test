@@ -31,9 +31,7 @@ const UserContextProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
         queryFn: async () => {
             try {
                 const { data: { user } } = await axios.get<Record<"user", UserData>>("/api/auth/login-with-cookie", {
-                    withCredentials: true, headers: {
-                        credentials: "include"
-                    }
+                    withCredentials: true
                 });
                 return user;
             } catch (e) {
