@@ -21,7 +21,7 @@ export class GameService {
         return this.gameModel.findById(id)
     }
 
-    async checkAnswer(id: string, answers: string[], letter: string): Promise<{ answer: string, isCorrect: boolean }[]> {
+    async checkAnswer(id: string, answer: string, letter: string): Promise<{ answer: string, isCorrect: boolean }[]> {
         try {
             const categoryData = await this.gameModel.findById(id);
 
@@ -38,14 +38,21 @@ export class GameService {
 
             const answersArray = categoryObject[categoryKeyName][letter];
 
-            if (!answersArray) {
-                throw new Error(`Letter ${letter} not found in category '${categoryKeyName}' data for ID ${id}`);
+            if (!Array.isArray(answersArray)) {
+                throw new Error(`Answers array not found for letter ${letter} in category '${categoryKeyName}'`);
             }
 
-            const results = answers.map(answer => ({
-                answer,
-                isCorrect: answersArray.includes(answer)
+            const results = answersArray.map((expectedAnswer: string) => ({
+                answer: expectedAnswer,
+                isCorrect: expectedAnswer === answer
             }));
+
+            if (!answersArray.includes(answer)) {
+                results.push({
+                    answer,
+                    isCorrect: false
+                });
+            }
 
             return results;
         } catch (error) {

@@ -54,7 +54,7 @@ const GamePage = () => {
         setInputs(newInputs);
     };
 
-    const { data: ids } = useQuery<string[] | any>({
+    const { data: ids } = useQuery<string[]>({
         queryKey: ['categories'],
         queryFn: async () => {
             try {
@@ -70,13 +70,14 @@ const GamePage = () => {
     const { mutate: submitAnswers } = useMutation<SubmitAnswersResponse, Error, { answers: string[], letter: string }>({
         mutationFn: async ({ answers, letter }) => {
             try {
-                const results: SubmitAnswersResponse = {};
+                const payload = ids?.map(id => ({
+                    id,
+                    answer: answers[ids.indexOf(id)],
+                    letter,
+                }));
 
-                for (const id of ids) {
-                    const response = await axios.post(`/api/games/submit/${id}`, { answers, letter });
-                    results[id] = response.data;
-                }
-                return results;
+                const response = await axios.post('/api/games/submit', payload);
+                return response.data;
             } catch (error) {
                 throw new Error('Failed to submit answers');
             }
@@ -88,6 +89,8 @@ const GamePage = () => {
             console.error('Error submitting answers:', error);
         },
     });
+    console.log(results);
+
 
     const finishGame = () => {
         submitAnswers({ answers: inputs, letter: chosenLetter });
@@ -95,7 +98,6 @@ const GamePage = () => {
     }
 
     if (!user) return <div>Loading...</div>;
-    console.log(results);
 
     return (
         <div className="game-page">
