@@ -1,8 +1,8 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { useUserContext } from "../../common/context/userContext";
 
 import "./login.scss";
-import { useUserContext } from "../../common/context/userContext";
 
 interface User {
     phoneNumber: string;

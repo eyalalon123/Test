@@ -26,7 +26,7 @@ const UserContextProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
 
     const client = useQueryClient();
 
-    const { data, refetch, status } = useQuery({
+    const { data, refetch: getUserData, status } = useQuery({
         queryKey: ["user"],
         queryFn: async () => {
             try {
@@ -37,7 +37,9 @@ const UserContextProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
             } catch (e) {
                 if (e instanceof AxiosError && e.response?.status === 401) {
                     cookieManager.remove("token");
-                    //navigate to login
+                    if (location.pathname !== '/login') {
+                        location.href = '/login'
+                    }
                     return null;
                 } else throw e;
             }
@@ -51,14 +53,16 @@ const UserContextProvider: React.FC<{ children?: React.ReactNode }> = ({ childre
                 withCredentials: true,
             }),
         onSuccess: () => {
-            refetch();
+            getUserData();
         }
     });
 
     function logout() {
+        if (location.pathname !== '/login') {
+            location.href = '/login'
+        }
         cookieManager.remove("token");
         client.setQueryData(["user"], null);
-        //navigate to login
     }
 
     function isLoggedIn() {

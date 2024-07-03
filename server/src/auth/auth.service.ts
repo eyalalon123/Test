@@ -46,7 +46,6 @@ export class AuthService {
         // }
 
         const token = this.JwtService.sign({ id: user._id, });
-        console.log('token: ', token);
 
         //don't call the token cookie 'token', it is too easy for hackers to know to steel this cookie (NS)
         res.cookie('token', token, {

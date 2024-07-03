@@ -11,6 +11,7 @@ import Login from "./pages/Login/Login"
 import RegisterPage from "./pages/Register/RegisterPage";
 import HomePage from "./pages/Home/HomePage";
 import Page_404 from "./pages/404-Page/404";
+import GamePage from "./pages/Game/game";
 
 import "./App.scss"
 
@@ -22,8 +23,9 @@ export const router = createBrowserRouter(
       <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
-      <Route path="/home" element={<HomePage />}
-      />,],
+      <Route path="/home" element={<HomePage />} />,
+      <Route path="/game" element={<GamePage />} />,
+    ],
   ),
 );
 
