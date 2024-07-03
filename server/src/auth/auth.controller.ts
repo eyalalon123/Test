@@ -23,11 +23,6 @@ export class AuthController {
         return res.send();
     }
 
-    @Get()
-    getAllUsers() {
-        return this.authService.getAllUsers()
-    }
-
     @Get("/login-with-cookie")
     async loginWithCookie(@Req() req: Request) {
         return await this.authService.signInUserByToken(req.cookies?.token);

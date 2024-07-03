@@ -17,17 +17,39 @@ export class GameService {
         return this.gameModel.find()
     }
 
-    async findLetterInEretzById(categoryId: string, letter: string): Promise<string[]> {
-        const category = await this.gameModel.findById(categoryId).exec();
-        if (!category) {
-            throw new NotFoundException(`Category with ID ${categoryId} not found`);
-        }
+    getCategoryById(id: string) {
+        return this.gameModel.findById(id)
+    }
 
-        const letterData = category.ארץ[letter];
-        if (!letterData) {
-            throw new NotFoundException(`Letter ${letter} not found in ארץ`);
-        }
+    async checkAnswer(id: string, answers: string[], letter: string): Promise<{ answer: string, isCorrect: boolean }[]> {
+        try {
+            const categoryData = await this.gameModel.findById(id);
 
-        return letterData;
+            if (!categoryData) {
+                throw new Error(`Category data not found for ID ${id}`);
+            }
+
+            const categoryObject = categoryData.toObject();
+            const categoryKeyName = Object.keys(categoryObject)[1];
+
+            if (!categoryObject[categoryKeyName]) {
+                throw new Error(`Category '${categoryKeyName}' not found in category data for ID ${id}`);
+            }
+
+            const answersArray = categoryObject[categoryKeyName][letter];
+
+            if (!answersArray) {
+                throw new Error(`Letter ${letter} not found in category '${categoryKeyName}' data for ID ${id}`);
+            }
+
+            const results = answers.map(answer => ({
+                answer,
+                isCorrect: answersArray.includes(answer)
+            }));
+
+            return results;
+        } catch (error) {
+            throw new Error(`Error checking answer: ${error.message}`);
+        }
     }
 }

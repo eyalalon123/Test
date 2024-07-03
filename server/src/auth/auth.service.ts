@@ -53,11 +53,6 @@ export class AuthService {
         })
     }
 
-    getAllUsers() {
-        //You are returning the passwords of all your users, you are aware of that? (NS)
-        return this.AuthModule.find()
-    }
-
     async getUserById(id: string) {
         //Make sure to omit the password from here aswell... perhaps use a middleware that makes sure that you never
         //accidently return passwords to the user.... (NS)

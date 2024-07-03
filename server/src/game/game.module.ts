@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
+import { AuthModule } from '../auth/auth.module';
 import { GameController } from './game.controller';
 import { GameService } from './game.service';
 import { Category, CategorySchema } from './shcemas/category.shcema';
@@ -7,6 +8,7 @@ import { Category, CategorySchema } from './shcemas/category.shcema';
 
 @Module({
     imports: [
+        AuthModule,
         MongooseModule.forFeature([
             { name: Category.name, schema: CategorySchema },
         ]),
