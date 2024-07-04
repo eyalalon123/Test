@@ -9,8 +9,8 @@ type CategoryData = {
     _id: string;
 }
 
-interface SubmitAnswersResponse {
-    [key: string]: boolean;
+type ResultsData = {
+    isCorrect: boolean;
 }
 
 const GamePage = () => {
@@ -20,8 +20,7 @@ const GamePage = () => {
     const [chosenLetter, setChosenLetter] = useState('');
     const values = ['ארץ', 'עיר', 'חי', 'צומח', 'דומם', 'ילד', 'ילדה', 'מקצוע', 'מפורסם']
     const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
-    const [results, setResults] = useState<{ [key: string]: boolean }>({});
-
+    const [results, setResults] = useState<ResultsData[]>([]);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
 
     const addRandomLetter = () => {
@@ -29,10 +28,13 @@ const GamePage = () => {
         const randomLetter = hebrewLetters[randomIndex];
         setChosenLetter(randomLetter);
         startTimer();
+        setResults([])
+        setInputs(Array(9).fill(''))
     };
 
     useEffect(() => {
         if (timeLeft === 0) {
+            submitAnswers({ answers: inputs, letter: chosenLetter });
             clearInterval(intervalId)
         }
     }, [timeLeft])
@@ -67,16 +69,17 @@ const GamePage = () => {
         },
     });
 
-    const { mutate: submitAnswers } = useMutation<SubmitAnswersResponse, Error, { answers: string[], letter: string }>({
+    const { mutate: submitAnswers } = useMutation<ResultsData[], Error, { answers: string[], letter: string }>({
         mutationFn: async ({ answers, letter }) => {
             try {
-                const payload = ids?.map(id => ({
+                const payload = ids && ids?.map(id => ({
                     id,
                     answer: answers[ids.indexOf(id)],
                     letter,
                 }));
 
                 const response = await axios.post('/api/games/submit', payload);
+
                 return response.data;
             } catch (error) {
                 throw new Error('Failed to submit answers');
@@ -89,12 +92,12 @@ const GamePage = () => {
             console.error('Error submitting answers:', error);
         },
     });
-    console.log(results);
 
 
     const finishGame = () => {
+        if (!chosenLetter) return;
         submitAnswers({ answers: inputs, letter: chosenLetter });
-        clearInterval(intervalId)
+        intervalId && clearInterval(intervalId);
     }
 
     if (!user) return <div>Loading...</div>;
@@ -111,6 +114,9 @@ const GamePage = () => {
                     <div key={index} className="input-container">
                         <label className='label-value'>{values[index]}</label>
                         <input
+                            className={results[index]?.isCorrect === true ? "true-answer" :
+                                results[index]?.isCorrect === false ? "false-answer" : "reset-answer"
+                            }
                             disabled={timeLeft === 0}
                             value={input}
                             onChange={(e) => handleInputChange(index, e.target.value)}

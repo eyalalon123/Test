@@ -1,75 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+
 .login_page {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    background-color: rgb(13, 121, 121);
-    justify-content: center;
+
+    .title {
+        height: 4%;
+        text-align: center;
+        margin-top: 10%;
+    }
 
     .login_inputs_container {
         display: flex;
         flex-direction: column;
         align-items: center;
-        width: 20%;
-        height: 20%;
-        text-align: center;
-        gap: 20px;
-
-        .text_username,
-        .text_password {
-            font-size: 1.3rem;
-            height: fit-content;
-        }
-
-        .phone_input,
-        .code_input {
-            width: 100%;
-            height: 15%;
-            border: 2px solid rgb(161, 138, 138);
-            text-align: right;
-        }
-
-        .error_message {
-            color: #9d1a00;
-            height: 0.1vh;
-            margin-top: -20px;
-            font-size: 15px;
-            align-self: flex-end;
-            text-align: right;
-        }
+        width: 70%;
+        gap: 3%;
+        margin-top: 30%;
     }
+}
 
-    .login_button {
-        background-color: antiquewhite;
-        margin-top: 1%;
-        width: 12%;
-        height: 3.5vh;
-    }
+.phone_input,
+.code_input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #888888;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: right;
+    background-color: #c5c5c5;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.phone_input:focus,
+.code_input:focus {
+    border-color: #424242;
+    box-shadow: 0 0 10px rgba(66, 66, 66, 0.5);
+    outline: none;
+}
+
+.error_message {
+    color: #ff4d4d;
+    height: 4%;
+    font-size: 0.9rem;
+    text-align: center;
+}
+
+.login_button {
+    background-color: #000000;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.login_button:hover {
+    background-color: #424242;
+    transform: scale(1.05);
 }
 
 @media screen and (max-width: 500px) {
     .login_page {
-        background-color: #bfdc7b;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        background-color: #888888;
+        background: linear-gradient(135deg, #ffffff, #c5c5c5);
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        animation: fadeIn 1s ease-in-out;
+    }
 
-        .login_inputs_container {
-            width: 70%;
-            height: 70%;
+    .login_inputs_container {
+        width: 70%;
+    }
 
-            .text_username,
-            .text_password {}
+    .phone_input,
+    .code_input {
+        height: 7%;
+    }
 
-            .phone_input,
-            .code_input {
-                height: 7%;
-            }
+    .login_button {
+        width: 100%;
+        height: 7%;
+    }
+}
 
-            .error_message {}
-        }
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
 
-        .login_button {
-            height: 7%;
-            width: 100%;
-        }
+    to {
+        opacity: 1;
     }
 }

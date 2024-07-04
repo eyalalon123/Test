@@ -46,8 +46,8 @@ const Login = () => {
     return (
         <>
             <div className="login_page">
+                <h1 className="title">ארץ עיר</h1>
                 <div className="login_inputs_container">
-                    <span className="text_username">מספר פלאפון</span>
                     <input
                         required
                         name="phoneNumber"
@@ -57,7 +57,6 @@ const Login = () => {
                         onChange={handleInputChange}
                         value={formData.phoneNumber}
                     />
-                    <span className="text_password">סיסמא</span>
                     <input
                         required
                         name="password"

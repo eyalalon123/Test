@@ -19,21 +19,24 @@ export class GameController {
     }
 
     @Get(':id')
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     async getUserById(@Param('id') id: string) {
         const findCategoryId = await this.gameService.getCategoryById(id)
         if (!findCategoryId) { throw new HttpException('category not found', 404) };
         return findCategoryId;
     }
 
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     @Post('submit')
     async submitAllAnswers(@Body() payload: { id: string, answer: string, letter: string }[]) {
         try {
             const results = await Promise.all(payload.map(async ({ id, answer, letter }) => {
                 return await this.gameService.checkAnswer(id, answer, letter);
             }));
-            return { results };
+
+            const flattenedResults = results.flat();
+
+            return flattenedResults;
         } catch (error) {
             throw new Error(`Error submitting answers: ${error.message}`);
         }

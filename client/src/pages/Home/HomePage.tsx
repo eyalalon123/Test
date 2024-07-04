@@ -18,8 +18,9 @@ const HomePage = () => {
         <div className="home-page">
             <div className="data-container">
                 <h2>Welcome to the Home Page {user.name}</h2>
-                <button onClick={handleGame}>התחל משחק</button>
-                <button onClick={logout}>התנתק</button>
+                <button className='start-game-button' onClick={handleGame}>התחל משחק</button>
+                <button className='start-game-button' onClick={() => console.log("gg")}>טבלת ניקוד</button>
+                <button className='start-game-button' onClick={logout}>התנתק</button>
             </div>
         </div>
     );

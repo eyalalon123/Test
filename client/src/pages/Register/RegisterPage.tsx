@@ -20,7 +20,7 @@ const RegisterPage = () => {
         queryKey: ["users"],
     });
 
-    const { mutate, isPending, isError } = useMutation({
+    const { mutate, isError } = useMutation({
         mutationFn: (newUser: User) =>
             axios.post('/api/auth/register', newUser),
         onSuccess: () => {
@@ -48,7 +48,7 @@ const RegisterPage = () => {
                 <input
                     type="text"
                     name="name"
-                    placeholder="Name"
+                    placeholder="שם"
                     maxLength={20}
                     value={formData.name}
                     onChange={handleInputChange}
@@ -56,7 +56,7 @@ const RegisterPage = () => {
                 <input
                     type="text"
                     name="phoneNumber"
-                    placeholder="Phone Number"
+                    placeholder="מספר פלאפון"
                     maxLength={10}
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
@@ -64,14 +64,14 @@ const RegisterPage = () => {
                 <input
                     type="password"
                     name="password"
-                    placeholder="password"
+                    placeholder="סיסמא"
                     maxLength={20}
                     value={formData.password}
                     onChange={handleInputChange}
                 />
                 {isError && <p className="error-data">error in the data</p>}
-                {isPending && <p className="pending-data">data is added</p>}
-                <button className="button-handle-users" onClick={handleSubmit}>register</button>
+                <button className="button-handle-users" onClick={handleSubmit}>הרשמה</button>
+                <button className="button-handle-users" onClick={() => navigate('/login')}>חזרה לעמוד הראשי</button>
             </div>
         </div>
     );

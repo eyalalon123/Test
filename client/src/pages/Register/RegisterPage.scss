@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+
 .home-page-container {
     height: 100%;
     width: 100%;
@@ -5,58 +8,98 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    background-color: #888888;
+    background: linear-gradient(135deg, #ffffff, #c5c5c5);
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    animation: fadeIn 1s ease-in-out;
+}
 
+.input-fields {
+    width: 10%;
+    height: 7%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
 
-    .input-fields {
-        width: 10%;
-        height: 7%;
+.input-fields input {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #888888;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: center;
+    background-color: #c5c5c5;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
 
-        .error-data,
-        .pending-data,
-        .loading-data {
-            color: red;
-            font-weight: 600;
-            font-size: large;
-            width: 100%;
-            height: 2vh;
-            text-align: center;
-        }
-    }
+.input-fields input:focus {
+    border-color: #424242;
+    box-shadow: 0 0 10px rgba(66, 66, 66, 0.5);
+    outline: none;
+}
 
-    .data-container {
-        text-align: center;
-        height: fit-content;
-        width: 50%;
-        height: 2.5vh;
-        margin-top: 3vh;
-    }
+.button-handle-users {
+    background-color: #000000;
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.button-handle-users:hover {
+    background-color: #424242;
+    transform: scale(1.05);
 }
 
 @media screen and (max-width: 500px) {
     .home-page-container {
-        .input-fields {
-            width: 70%;
-            height: 70%;
-            display: flex;
-            flex-direction: column;
-            gap: 2vh;
+        background-color: #888888;
+        background: linear-gradient(135deg, #ffffff, #c5c5c5);
+        padding: 10px;
 
-            input {
-                margin: 0;
-                height: 7%;
-                width: 100%;
-                text-align: center;
-            }
-
-            // .error-data,
-            // .pending-data,
-            // .loading-data {}
-
-            .button-handle-users {
-                margin: 0;
-                width: 100%;
-                height: 7%;
-            }
+        .error-data {
+            height: 4%;
+            text-align: center;
+            color: red;
         }
+    }
+
+    .input-fields {
+        width: 70%;
+        height: 70%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .input-fields input {
+        width: 100%;
+        height: 7%;
+    }
+
+    .button-handle-users {
+        width: 100%;
+        height: 7%;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }

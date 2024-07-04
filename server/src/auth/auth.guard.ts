@@ -39,7 +39,7 @@ export class AuthGuard implements CanActivate {
 
   private validateToken(token: string): any {
     try {
-      const decoded = jwt.verify(token, 'nisim');
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
       return decoded;
     } catch (err) {
       return null;

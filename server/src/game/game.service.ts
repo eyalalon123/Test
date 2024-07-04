@@ -21,7 +21,7 @@ export class GameService {
         return this.gameModel.findById(id)
     }
 
-    async checkAnswer(id: string, answer: string, letter: string): Promise<{ answer: string, isCorrect: boolean }[]> {
+    async checkAnswer(id: string, answer: string, letter: string) {
         try {
             const categoryData = await this.gameModel.findById(id);
 
@@ -44,13 +44,15 @@ export class GameService {
 
             const results = answersArray.map((expectedAnswer: string) => ({
                 answer: expectedAnswer,
-                isCorrect: expectedAnswer === answer
+                isCorrect: expectedAnswer === answer,
+                id: id
             }));
 
             if (!answersArray.includes(answer)) {
                 results.push({
                     answer,
-                    isCorrect: false
+                    isCorrect: false,
+                    id: id
                 });
             }
 
