@@ -12,6 +12,7 @@ import RegisterPage from "./pages/Register/RegisterPage";
 import HomePage from "./pages/Home/HomePage";
 import Page_404 from "./pages/404-Page/404";
 import GamePage from "./pages/Game/game";
+import OnlineGame from "./pages/OnlineGame/OnlineGame";
 
 import "./App.scss"
 
@@ -25,6 +26,7 @@ export const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />,
       <Route path="/home" element={<HomePage />} />,
       <Route path="/game" element={<GamePage />} />,
+      <Route path="/online-game" element={<OnlineGame />} />,
     ],
   ),
 );

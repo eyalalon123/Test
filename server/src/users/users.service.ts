@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { updateUserDTO, userDTO } from './DTO/user.dto';

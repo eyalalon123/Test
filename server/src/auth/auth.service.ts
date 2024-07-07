@@ -1,5 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, InternalServerErrorException, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { Model } from 'mongoose';
 
 import { registerDTO, loginDTO } from './DTO/auth.dto';
@@ -7,6 +7,7 @@ import { Users } from './schemas/auth.schema';
 import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt'
 import { Response } from 'express';
+import { userDTO } from 'src/users/DTO/user.dto';
 
 @Injectable()
 export class AuthService {
@@ -16,19 +17,25 @@ export class AuthService {
     ) { }
 
     async register(registerDTO: registerDTO) {
-        const { name, phoneNumber, password } = registerDTO
-        //bcrypt is a very easy-to-hack library with a low security standart, recomended to use something else (NS)
-        const hashedPassword = await bcrypt.hash(password, 10)
+        const { name, phoneNumber, password } = registerDTO;
 
-        await this.AuthModule.create({
-            name,
-            phoneNumber,
-            password: hashedPassword
-        })
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-        //where is your error handleing?!?!?
-        //it is not recomended to keep the user in a vaiable, just dont declare it for security reasons (NS)
-        return true
+        const isExist = await this.AuthModule.findOne({ name: name });
+        if (isExist) {
+            throw new BadRequestException('User with the same name already exists');
+        }
+
+        try {
+            await this.AuthModule.create({
+                name,
+                phoneNumber,
+                password: hashedPassword
+            });
+            return true;
+        } catch (error) {
+            throw new InternalServerErrorException('Error creating user');
+        }
     }
 
     async login(res: Response, loginDTO: loginDTO) {
@@ -53,11 +60,17 @@ export class AuthService {
         })
     }
 
+    async getUserByName(name: string) {
+        const username = await this.AuthModule.findOne({ name });
+        return username.name
+    }
+
     async getUserById(id: string) {
         //Make sure to omit the password from here aswell... perhaps use a middleware that makes sure that you never
         //accidently return passwords to the user.... (NS)
         return { user: await this.AuthModule.findById(id) }
     }
+
 
     async signInUserByToken(token?: string) {
         try {
@@ -71,4 +84,5 @@ export class AuthService {
 
         return await this.getUserById(id);
     }
+
 }

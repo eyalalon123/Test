@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useUserContext } from '../../common/context/userContext';
+import axios from 'axios';
 
 import "./game.scss";
 

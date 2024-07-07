@@ -26,7 +26,7 @@ export class GameController {
         return findCategoryId;
     }
 
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     @Post('submit')
     async submitAllAnswers(@Body() payload: { id: string, answer: string, letter: string }[]) {
         try {

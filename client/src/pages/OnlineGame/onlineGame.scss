@@ -1,0 +1,19 @@
+.join-game {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: linear-gradient(135deg, #ffffff, #c5c5c5);
+    font-family: 'Rubik', sans-serif;
+
+    .create-game {
+        height: 7%;
+    }
+
+    .rival-input {}
+
+    .join-game-button {
+        height: 7%;
+    }
+}
