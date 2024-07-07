@@ -21,6 +21,7 @@ const GamePage = () => {
     const values = ['ארץ', 'עיר', 'חי', 'צומח', 'דומם', 'ילד', 'ילדה', 'מקצוע', 'מפורסם']
     const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
     const [results, setResults] = useState<ResultsData[]>([]);
+
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
 
     const addRandomLetter = () => {
@@ -72,9 +73,11 @@ const GamePage = () => {
     const { mutate: submitAnswers } = useMutation<ResultsData[], Error, { answers: string[], letter: string }>({
         mutationFn: async ({ answers, letter }) => {
             try {
-                const payload = ids && ids?.map(id => ({
+                if (!ids) throw new Error('Category IDs not available');
+
+                const payload = ids.map((id, index) => ({
                     id,
-                    answer: answers[ids.indexOf(id)],
+                    answer: answers[index],
                     letter,
                 }));
 
@@ -93,12 +96,11 @@ const GamePage = () => {
         },
     });
 
-
     const finishGame = () => {
         if (!chosenLetter) return;
         submitAnswers({ answers: inputs, letter: chosenLetter });
-        intervalId && clearInterval(intervalId);
-    }
+        if (intervalId) clearInterval(intervalId);
+    };
 
     if (!user) return <div>Loading...</div>;
 

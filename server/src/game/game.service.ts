@@ -30,7 +30,7 @@ export class GameService {
             }
 
             const categoryObject = categoryData.toObject();
-            const categoryKeyName = Object.keys(categoryObject)[1];
+            const categoryKeyName = Object.keys(categoryObject).find(key => key !== '_id');
 
             if (!categoryObject[categoryKeyName]) {
                 throw new Error(`Category '${categoryKeyName}' not found in category data for ID ${id}`);
@@ -42,23 +42,16 @@ export class GameService {
                 throw new Error(`Answers array not found for letter ${letter} in category '${categoryKeyName}'`);
             }
 
-            const results = answersArray.map((expectedAnswer: string) => ({
-                answer: expectedAnswer,
-                isCorrect: expectedAnswer === answer,
-                id: id
-            }));
+            const isCorrect = answersArray.includes(answer);
 
-            if (!answersArray.includes(answer)) {
-                results.push({
-                    answer,
-                    isCorrect: false,
-                    id: id
-                });
-            }
-
-            return results;
+            return {
+                answer,
+                isCorrect,
+                id
+            };
         } catch (error) {
             throw new Error(`Error checking answer: ${error.message}`);
         }
     }
+
 }

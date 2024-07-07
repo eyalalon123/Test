@@ -26,17 +26,15 @@ export class GameController {
         return findCategoryId;
     }
 
-    @UseGuards(AuthGuard)
+    // @UseGuards(AuthGuard)
     @Post('submit')
     async submitAllAnswers(@Body() payload: { id: string, answer: string, letter: string }[]) {
         try {
-            const results = await Promise.all(payload.map(async ({ id, answer, letter }) => {
-                return await this.gameService.checkAnswer(id, answer, letter);
+            const results = await Promise.all(payload.map(({ id, answer, letter }) => {
+                return this.gameService.checkAnswer(id, answer, letter);
             }));
 
-            const flattenedResults = results.flat();
-
-            return flattenedResults;
+            return results;
         } catch (error) {
             throw new Error(`Error submitting answers: ${error.message}`);
         }
