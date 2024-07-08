@@ -11,7 +11,7 @@ import Login from "./pages/Login/Login"
 import RegisterPage from "./pages/Register/RegisterPage";
 import HomePage from "./pages/Home/HomePage";
 import Page_404 from "./pages/404-Page/404";
-import GamePage from "./pages/Game/game";
+import GamePage from "./pages/Game/SinglePlayer";
 import OnlineGame from "./pages/OnlineGame/OnlineGame";
 
 import "./App.scss"

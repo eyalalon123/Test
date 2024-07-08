@@ -1,60 +1,75 @@
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import axios from 'axios';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import io from 'socket.io-client';
+import TwoPlayer from '../Game/TwoPlayer';
 
-import "./onlineGame.scss";
+import './onlineGame.scss';
+
+const socket = io('http://localhost:8000', {
+    withCredentials: true,
+});
 
 const OnlineGame = () => {
-    const [rivalUsername, setRivalUsername] = useState("");
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState("");
+    const [rivalUsername, setRivalUsername] = useState('');
+    const [gameStarted, setGameStarted] = useState(false);
+    const navigate = useNavigate()
 
-    const { refetch } = useQuery({
-        queryKey: ['users', rivalUsername],
-        queryFn: async () => {
-            try {
-                const response = await axios.get(`/api/auth/${rivalUsername}`);
-                return response.data;
-            } catch (error) {
-                throw new Error('Failed to fetch user data');
-            }
-        },
-        enabled: false,
-    });
+    useEffect(() => {
+        socket.on('connect', () => {
+            console.log('Connected to server');
+        });
 
-    const createChannel = async () => {
-        setIsLoading(true);
-        setError("");
+        socket.on('gameStarted', ({ opponent }) => {
+            console.log(`Game started with opponent: ${opponent}`);
+            setGameStarted(true);
+        });
 
-        try {
-            const result = await refetch();
-            setIsLoading(false);
+        socket.on('gameEnded', () => {
+            console.log('Game ended');
+            setGameStarted(false);
+            navigate('/home')
+        });
 
-            if (result.data) {
-                alert(`Hey ${result.data}, you have been invited to play!`);
-            } else {
-                alert("User not found.");
-            }
-        } catch (error) {
-            setIsLoading(false);
-            setError("Failed to fetch user data");
-            console.error("Error fetching user data:", error);
+        socket.on('joinError', ({ error }) => {
+            console.log(error);
+        });
+
+        return () => {
+            socket.off('connect');
+            socket.off('gameStarted');
+            socket.off('timer');
+            socket.off('gameEnded');
+            socket.off('joinError');
+            socket.off('disconnect');
+        };
+    }, []);
+
+    const joinGame = () => {
+        if (!rivalUsername.trim()) {
+            console.log('שם המשתמש לא יכול להיות ריק');
+            return;
         }
+
+        socket.emit('joinGame', { username: rivalUsername });
     };
 
     return (
-        <div className="join-game">
-            <h4 className="create-game">צור משחק</h4>
-            <input
-                className="rival-input"
-                value={rivalUsername}
-                onChange={e => setRivalUsername(e.target.value)}
-                placeholder="שם משתמש של יריב"
-            />
-            <button className="join-game-button" onClick={createChannel} disabled={isLoading}>
-                {isLoading ? 'Loading...' : 'הצטרף/התחל משחק'}
-            </button>
-            {error && <p className="error-message">{error}</p>}
+        <div className="online-game">
+            {!gameStarted && (
+                <div className="join-game">
+                    <h4 className="create-game">צור משחק</h4>
+                    <input
+                        className="rival-input"
+                        value={rivalUsername}
+                        onChange={(e) => setRivalUsername(e.target.value)}
+                        placeholder="שם משתמש של יריב"
+                    />
+                    <button className="join-game-button" onClick={joinGame}>
+                        'הצטרף/התחל משחק'
+                    </button>
+                </div>
+            )}
+            {gameStarted && <TwoPlayer />}
         </div>
     );
 };

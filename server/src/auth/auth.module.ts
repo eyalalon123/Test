@@ -28,6 +28,6 @@ import { UsersService } from 'src/users/users.service';
     ],
     controllers: [AuthController],
     providers: [AuthService, UsersService, AuthGuard],
-    exports: [AuthGuard, PassportModule, UsersService],
+    exports: [AuthGuard, PassportModule, UsersService,AuthService],
 })
 export class AuthModule { }

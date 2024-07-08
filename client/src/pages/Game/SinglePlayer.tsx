@@ -13,7 +13,7 @@ type ResultsData = {
     isCorrect: boolean;
 }
 
-const GamePage = () => {
+const GamePage: React.FC = () => {
     const { user } = useUserContext();
     const [inputs, setInputs] = useState(Array(9).fill(''));
     const [timeLeft, setTimeLeft] = useState(60);
