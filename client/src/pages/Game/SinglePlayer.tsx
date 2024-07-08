@@ -9,10 +9,6 @@ type CategoryData = {
     _id: string;
 }
 
-type ResultsData = {
-    isCorrect: boolean;
-}
-
 const GamePage: React.FC = () => {
     const { user } = useUserContext();
     const [inputs, setInputs] = useState(Array(9).fill(''));
@@ -20,7 +16,7 @@ const GamePage: React.FC = () => {
     const [chosenLetter, setChosenLetter] = useState('');
     const values = ['ארץ', 'עיר', 'חי', 'צומח', 'דומם', 'ילד', 'ילדה', 'מקצוע', 'מפורסם']
     const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
-    const [results, setResults] = useState<ResultsData[]>([]);
+    const [results, setResults] = useState<boolean[]>([]);
 
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
 
@@ -70,18 +66,19 @@ const GamePage: React.FC = () => {
         },
     });
 
-    const { mutate: submitAnswers } = useMutation<ResultsData[], Error, { answers: string[], letter: string }>({
+    const { mutate: submitAnswers } = useMutation<boolean[], Error, { answers: string[], letter: string }>({
         mutationFn: async ({ answers, letter }) => {
             try {
                 if (!ids) throw new Error('Category IDs not available');
 
                 const payload = ids.map((id, index) => ({
-                    id,
+                    categoryId: id,
                     answer: answers[index],
-                    letter,
                 }));
 
-                const response = await axios.post('/api/games/submit', payload);
+                const response = await axios.post('/api/games/submit', { answers: payload, letter });
+                console.log('response: ', response.data);
+
 
                 return response.data;
             } catch (error) {
@@ -116,8 +113,8 @@ const GamePage: React.FC = () => {
                     <div key={index} className="input-container">
                         <label className='label-value'>{values[index]}</label>
                         <input
-                            className={results[index]?.isCorrect === true ? "true-answer" :
-                                results[index]?.isCorrect === false ? "false-answer" : "reset-answer"
+                            className={results[index] === true ? "true-answer" :
+                                results[index] === false ? "false-answer" : "reset-answer"
                             }
                             disabled={timeLeft === 0}
                             value={input}

@@ -1,6 +1,6 @@
 import { Body, Controller, Get, HttpException, Param, Post, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
+import { AnswersDTO, CreateGameDTO } from './DTO/game.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
-import { CreateGameDTO } from './DTO/game.dto';
 import { GameService } from './game.service';
 
 @Controller('api/games')
@@ -18,6 +18,16 @@ export class GameController {
         return this.gameService.getAllData()
     }
 
+    @UseGuards(AuthGuard)
+    @Post('submit')
+    async submitAllAnswers(@Body() body: AnswersDTO) {
+        try {
+            return await this.gameService.checkAnswers(body);
+        } catch (error) {
+            throw new Error(`Error submitting answers: ${error.message}`);
+        }
+    }
+
     @Get(':id')
     @UseGuards(AuthGuard)
     async getUserById(@Param('id') id: string) {
@@ -26,17 +36,4 @@ export class GameController {
         return findCategoryId;
     }
 
-    @UseGuards(AuthGuard)
-    @Post('submit')
-    async submitAllAnswers(@Body() payload: { id: string, answer: string, letter: string }[]) {
-        try {
-            const results = await Promise.all(payload.map(({ id, answer, letter }) => {
-                return this.gameService.checkAnswer(id, answer, letter);
-            }));
-
-            return results;
-        } catch (error) {
-            throw new Error(`Error submitting answers: ${error.message}`);
-        }
-    }
 }

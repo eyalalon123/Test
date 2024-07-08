@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
-import { CreateGameDTO } from './DTO/game.dto';
+import mongoose, { Model } from 'mongoose';
+import { AnswersDTO, CreateGameDTO } from './DTO/game.dto';
 import { Category } from './shcemas/category.shcema';
 
 @Injectable()
@@ -14,44 +14,43 @@ export class GameService {
     }
 
     getAllData() {
-        return this.gameModel.find()
+        return this.gameModel.find();
     }
 
     getCategoryById(id: string) {
         return this.gameModel.findById(id)
     }
 
-    async checkAnswer(id: string, answer: string, letter: string) {
+    async checkAnswers({ answers: givenAnswers, letter }: AnswersDTO) {
         try {
-            const categoryData = await this.gameModel.findById(id);
+            const categorysAnswers: { answers: string[], _id: string }[] = await this.getAnswersByLetter(letter);
+            return givenAnswers.map((givenAnswer) => {
+                // find category answer by given answer id 
+                const categoryAnswers = categorysAnswers.find(({ _id }) => givenAnswer.categoryId === _id.toString());
 
-            if (!categoryData) {
-                throw new Error(`Category data not found for ID ${id}`);
-            }
-
-            const categoryObject = categoryData.toObject();
-            const categoryKeyName = Object.keys(categoryObject).find(key => key !== '_id');
-
-            if (!categoryObject[categoryKeyName]) {
-                throw new Error(`Category '${categoryKeyName}' not found in category data for ID ${id}`);
-            }
-
-            const answersArray = categoryObject[categoryKeyName][letter];
-
-            if (!Array.isArray(answersArray)) {
-                throw new Error(`Answers array not found for letter ${letter} in category '${categoryKeyName}'`);
-            }
-
-            const isCorrect = answersArray.includes(answer);
-
-            return {
-                answer,
-                isCorrect,
-                id
-            };
-        } catch (error) {
-            throw new Error(`Error checking answer: ${error.message}`);
+                // return if given answer exist in categoryAnswers
+                return !!categoryAnswers?.answers.includes(givenAnswer.answer)
+            })
+        }
+        catch (err) {
+            console.log("Error while checkAnswers", err);
+            throw err;
         }
     }
 
+    async getAnswersByLetter(letter: string) {
+        const aggregationResult = await this.gameModel.aggregate([
+            // make the answers array of the all categroies be goal nefesh
+            { $unwind: '$answers' },
+
+            // filter the answers by given letter
+            { $match: { 'answers.letter': letter } },
+
+            // return only _id (by default) and categoryAnswers as 'answers'
+            { $project: { answers: '$answers.categoryAnswers' } } // Project _id and categoryAnswers fields
+        ]);
+
+        if (aggregationResult.length > 0) return aggregationResult;
+        throw new BadRequestException();
+    }
 }
