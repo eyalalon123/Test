@@ -15,6 +15,7 @@ const RegisterPage = () => {
 
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
     const navigate = useNavigate();
+    const [showText, setShowText] = useState<Boolean>(false);
 
     const { refetch } = useQuery({
         queryKey: ["users"],
@@ -69,11 +70,19 @@ const RegisterPage = () => {
                     value={formData.password}
                     onChange={handleInputChange}
                 />
-                {isError && <p className="error-data">error in the data</p>}
+                <img onClick={() => setShowText(true)} src="src/images/info_Icon.png" alt="info" className="info-icon" />
+                {isError && <p className="error-data">שגיאה בנתונים</p>}
+                {showText &&
+                    <div className="text-icon-container">
+                        <p>שם חייב להכיל אותיות באנגלית בלבד</p>
+                        <p>מספר פלאפון חייב להיות 10 ספרות בדיוק</p>
+                        <p>סיסמה צריכה להכיל אות קטנה באנגלית אות גדולה באנגלית ומספר אחד לפחות</p>
+                    </div>
+                }
                 <button className="button-handle-users" onClick={handleSubmit}>הרשמה</button>
                 <button className="button-handle-users" onClick={() => navigate('/login')}>חזרה לעמוד הראשי</button>
             </div>
-        </div>
+        </div >
     );
 };
 

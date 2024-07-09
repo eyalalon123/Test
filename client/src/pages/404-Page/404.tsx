@@ -7,8 +7,8 @@ const Page_404 = () => {
 
     return (
         <div className="not-found-page-container">
-            <div className="message-404">404 page not found</div>
-            <button className="button-404" onClick={() => navigate('/home')}>click here to home page</button>
+            <div className="message-404">שגיאה 404</div>
+            <button className="button-404" onClick={() => navigate('/home')}>לחץ כאן לחזרה לעמוד הבית</button>
         </div>
     )
 

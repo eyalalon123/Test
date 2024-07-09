@@ -1,6 +1,7 @@
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
 import { useUserContext } from '../../common/context/userContext';
+import { useMutation, useQuery } from '@tanstack/react-query';
+import ErrorPopup from '../GenericPopup/ErrorPopup';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 
 import "./game.scss";
@@ -17,6 +18,7 @@ const GamePage: React.FC = () => {
     const values = ['ארץ', 'עיר', 'חי', 'צומח', 'דומם', 'ילד', 'ילדה', 'מקצוע', 'מפורסם']
     const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
     const [results, setResults] = useState<boolean[]>([]);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
 
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
 
@@ -77,8 +79,6 @@ const GamePage: React.FC = () => {
                 }));
 
                 const response = await axios.post('/api/games/submit', { answers: payload, letter });
-                console.log('response: ', response.data);
-
 
                 return response.data;
             } catch (error) {
@@ -94,7 +94,10 @@ const GamePage: React.FC = () => {
     });
 
     const finishGame = () => {
-        if (!chosenLetter) return;
+        if (!chosenLetter) {
+            setShowErrorPopup(true)
+            return
+        };
         submitAnswers({ answers: inputs, letter: chosenLetter });
         if (intervalId) clearInterval(intervalId);
     };
@@ -102,29 +105,32 @@ const GamePage: React.FC = () => {
     if (!user) return <div>Loading...</div>;
 
     return (
-        <div className="game-page">
-            <div className="timer">זמן:{timeLeft}</div>
-            <div className='random-letter-container'>
-                <button className='random-letter-button' onClick={addRandomLetter}>בחירת אות אקראית</button>
-                <p className='chosen-letter'>{chosenLetter}</p>
+        <>
+            {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
+            <div className="game-page">
+                <div className="timer">זמן:{timeLeft}</div>
+                <div className='random-letter-container'>
+                    <button className='random-letter-button' onClick={addRandomLetter}>בחירת אות אקראית</button>
+                    <p className='chosen-letter'>{chosenLetter}</p>
+                </div>
+                <div className="inputs">
+                    {inputs.map((input, index) => (
+                        <div key={index} className="input-container">
+                            <label className='label-value'>{values[index]}</label>
+                            <input
+                                className={results[index] === true ? "true-answer" :
+                                    results[index] === false ? "false-answer" : "reset-answer"
+                                }
+                                disabled={timeLeft === 0}
+                                value={input}
+                                onChange={(e) => handleInputChange(index, e.target.value)}
+                            />
+                        </div>
+                    ))}
+                </div>
+                <button className='send-button' onClick={finishGame}>שליחה</button>
             </div>
-            <div className="inputs">
-                {inputs.map((input, index) => (
-                    <div key={index} className="input-container">
-                        <label className='label-value'>{values[index]}</label>
-                        <input
-                            className={results[index] === true ? "true-answer" :
-                                results[index] === false ? "false-answer" : "reset-answer"
-                            }
-                            disabled={timeLeft === 0}
-                            value={input}
-                            onChange={(e) => handleInputChange(index, e.target.value)}
-                        />
-                    </div>
-                ))}
-            </div>
-            <button className='send-button' onClick={finishGame}>שליחה</button>
-        </div>
+        </>
     );
 };
 

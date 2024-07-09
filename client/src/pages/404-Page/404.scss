@@ -1,27 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
 .not-found-page-container {
+    width: 100vw;
+    height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    background: linear-gradient(135deg, #ffffff, #c5c5c5);
+    font-family: 'Rubik', sans-serif;
+    color: #424242;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.message-404 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #424242;
+    animation: fadeIn 1s ease-in-out;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    height: 20%;
     text-align: center;
+}
 
-    .message-404 {
-        height: 20vh;
-        font-size: 2rem;
-        color: #333;
+.button-404 {
+    width: 60%;
+    height: 40px;
+    font-size: 1.2rem;
+    background-color: #424242;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    animation: fadeIn 2s ease-in-out;
+    margin-top: 20px;
+}
+
+.button-404:hover {
+    background-color: #888888;
+    transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
 
-    .button-404 {
-        width: 10vw;
-        height: 10vh;
-        background-color: #344961;
-        color: white;
-        border: none;
-        border-radius: 0.25rem;
-        font-size: 1rem;
-        cursor: pointer;
-    }
-
-    .button-404:hover {
-        background-color: #0056b3;
+    to {
+        opacity: 1;
     }
 }

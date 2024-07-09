@@ -64,9 +64,7 @@ const OnlineGame = () => {
                         onChange={(e) => setRivalUsername(e.target.value)}
                         placeholder="שם משתמש של יריב"
                     />
-                    <button className="join-game-button" onClick={joinGame}>
-                        'הצטרף/התחל משחק'
-                    </button>
+                    <button className="join-game-button" onClick={joinGame}>הצטרף / התחל משחק</button>
                 </div>
             )}
             {gameStarted && <TwoPlayer />}

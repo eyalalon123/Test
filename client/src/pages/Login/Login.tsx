@@ -30,7 +30,7 @@ const Login = () => {
                 navigate("/home");
             },
             onError: () => {
-                setError("Phone number or password in incorrect");
+                setError("מספר פלאפון או סיסמה לא נכונים");
             }
         });
     };

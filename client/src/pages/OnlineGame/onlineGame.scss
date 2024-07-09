@@ -1,19 +1,90 @@
-.join-game {
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+.online-game {
     width: 100vw;
     height: 100vh;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     background: linear-gradient(135deg, #ffffff, #c5c5c5);
     font-family: 'Rubik', sans-serif;
+    color: #424242;
+    animation: fadeIn 2s ease-in-out;
+}
 
-    .create-game {
-        height: 7%;
+.join-game {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: slideIn 1s ease-out;
+}
+
+.create-game {
+    height: 20%;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #424242;
+    animation: fadeIn 1s ease-in-out;
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.rival-input {
+    width: 80%;
+    height: 40px;
+    padding: 8px 10px;
+    font-size: 1rem;
+    border: 1px solid #888888;
+    border-radius: 4px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    animation: fadeIn 2s ease-in-out;
+    margin-bottom: 20px;
+}
+
+.rival-input:focus {
+    border-color: #424242;
+    box-shadow: 0 0 10px rgba(66, 66, 66, 0.5);
+    outline: none;
+}
+
+.join-game-button {
+    width: 80%;
+    height: 50px;
+    font-size: 1.2rem;
+    background-color: #424242;
+    color: #ffffff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    animation: fadeIn 2s ease-in-out;
+}
+
+.join-game-button:hover {
+    background-color: #888888;
+    transform: scale(1.1);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
     }
 
-    .rival-input {}
+    to {
+        opacity: 1;
+    }
+}
 
-    .join-game-button {
-        height: 7%;
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
     }
 }
