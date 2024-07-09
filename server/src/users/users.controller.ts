@@ -20,7 +20,7 @@ export class UsersController {
     }
 
     @Get(':id')
-    // @UseGuards(AuthGuard)
+    @UseGuards(AuthGuard)
     async getUserById(@Param('id') id: string) {
         const findUser = await this.userService.getUserById(id)
         if (!findUser) { throw new HttpException('user not found', 404) };

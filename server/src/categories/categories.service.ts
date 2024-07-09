@@ -1,24 +1,24 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
-import { AnswersDTO, CreateGameDTO } from './DTO/game.dto';
-import { Category } from './shcemas/category.shcema';
+import { Model } from 'mongoose';
+import { AnswersDTO, CreateGameDTO } from './DTO/categories.dto';
+import { Category } from './shcemas/category.schema';
 
 @Injectable()
-export class GameService {
-    constructor(@InjectModel(Category.name) private gameModel: Model<Category>) { }
+export class CategoriesService {
+    constructor(@InjectModel(Category.name) private categoryModel: Model<Category>) { }
 
     createGame(game: CreateGameDTO) {
-        const newGame = new this.gameModel(game);
+        const newGame = new this.categoryModel(game);
         return newGame.save();
     }
 
     getAllData() {
-        return this.gameModel.find();
+        return this.categoryModel.find();
     }
 
     getCategoryById(id: string) {
-        return this.gameModel.findById(id)
+        return this.categoryModel.findById(id)
     }
 
     async checkAnswers({ answers: givenAnswers, letter }: AnswersDTO) {
@@ -39,7 +39,7 @@ export class GameService {
     }
 
     async getAnswersByLetter(letter: string) {
-        const aggregationResult = await this.gameModel.aggregate([
+        const aggregationResult = await this.categoryModel.aggregate([
             // make the answers array of the all categroies be goal nefesh
             { $unwind: '$answers' },
 

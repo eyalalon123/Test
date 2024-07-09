@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsString, ValidateNested, } from 'class-validator';
-import { Category } from '../shcemas/category.shcema';
+import { Category } from '../shcemas/category.schema';
 
 export class CreateGameDTO {
     categories: Category;
