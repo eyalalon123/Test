@@ -55,8 +55,4 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
         this.sendSocket(player1, player2, "start-game", [{ gameId }])
     }
-
-    // endGame() {
-    // }
-
 }
