@@ -1,56 +1,30 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import io from 'socket.io-client';
+import axios from 'axios';
+import { useState } from 'react';
+import { useUser } from '../../common/context/userContext';
 import TwoPlayer from '../Game/TwoPlayer';
 
 import './onlineGame.scss';
 
-const socket = io('http://localhost:8000', {
-    withCredentials: true,
-});
-
 const OnlineGame = () => {
     const [rivalUsername, setRivalUsername] = useState('');
     const [gameStarted, setGameStarted] = useState(false);
-    const navigate = useNavigate()
+    const { user } = useUser();
 
-    useEffect(() => {
-        socket.on('connect', () => {
-            console.log('Connected to server');
-        });
-
-        socket.on('gameStarted', ({ opponent }) => {
-            console.log(`Game started with opponent: ${opponent}`);
-            setGameStarted(true);
-        });
-
-        socket.on('gameEnded', () => {
-            console.log('Game ended');
-            setGameStarted(false);
-            navigate('/home')
-        });
-
-        socket.on('joinError', ({ error }) => {
-            console.log(error);
-        });
-
-        return () => {
-            socket.off('connect');
-            socket.off('gameStarted');
-            socket.off('timer');
-            socket.off('gameEnded');
-            socket.off('joinError');
-            socket.off('disconnect');
-        };
-    }, []);
-
-    const joinGame = () => {
+    const joinGame = async () => {
         if (!rivalUsername.trim()) {
             console.log('שם המשתמש לא יכול להיות ריק');
             return;
         }
-
-        socket.emit('joinGame', { username: rivalUsername });
+        try {
+            const data = await axios.post('/api/game-room', {
+                playerId: user?._id,
+                opponentName: rivalUsername
+            })
+            console.log('data: ', data);
+        }
+        catch (err) {
+            console.log('err: ', err);
+        }
     };
 
     return (

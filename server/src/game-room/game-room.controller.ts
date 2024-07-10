@@ -11,8 +11,13 @@ export class GameRoomController {
         return this.gameRoomService.createGame(newGameData);
     }
 
-    @Post()
+    @Post('/join-game')
     joinGame(@Body() joinGameData: JoinGameDTO) {
         return this.gameRoomService.joinGame(joinGameData);
     }
+
+    // @Post('/start-game')
+    // startGame(@Body() joinGameData: JoinGameDTO) {
+    //     return this.gameRoomService.startGame(joinGameData);
+    // }
 }

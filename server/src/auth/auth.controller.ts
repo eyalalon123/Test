@@ -17,8 +17,8 @@ export class AuthController {
     @Post('/login')
     @UsePipes(new ValidationPipe())
     async login(@Res() res: Response, @Body() user: loginDTO) {
-        await this.authService.login(res, user);
-        return res.send();
+        const id = await this.authService.login(res, user);
+        return res.send({ id });
     }
 
     @Get("/login-with-cookie")
@@ -28,8 +28,7 @@ export class AuthController {
 
     @Get(':username')
     async getUserByName(@Param('username') name: string) {
-        const findUsername = await this.authService.getUserByName(name)
-        return findUsername
+        return await this.authService.getUserIdByName(name)
     }
 
     @Get(':id')

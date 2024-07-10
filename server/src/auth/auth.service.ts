@@ -58,11 +58,12 @@ export class AuthService {
         res.cookie('token', token, {
             maxAge: parseFloat(process.env.JWT_EXPIRES.replace("d", "")) * 24 * 60 * 60 * 1000
         })
+        return user._id;
     }
 
-    async getUserByName(name: string) {
+    async getUserIdByName(name: string) {
         const username = await this.AuthModule.findOne({ name });
-        return username.name
+        return username._id
     }
 
     async getUserById(id: string) {

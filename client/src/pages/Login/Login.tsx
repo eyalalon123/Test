@@ -1,6 +1,6 @@
 import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { useUserContext } from "../../common/context/userContext";
+import { useUser } from "../../common/context/userContext";
 
 import "./login.scss";
 
@@ -11,7 +11,7 @@ interface User {
 
 const Login = () => {
     const navigate = useNavigate();
-    const { login, fetchStatus, isLoggedIn } = useUserContext();
+    const { login, fetchStatus, isLoggedIn } = useUser();
     const [formData, setFormData] = useState<User>({ phoneNumber: "", password: "" });
     const [error, setError] = useState<string>("");
 

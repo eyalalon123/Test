@@ -10,8 +10,8 @@ import { UsersModule } from './users/users.module';
 import { TestsModule } from './tests/tests.module';
 import { AuthModule } from './auth/auth.module';
 
-import { GameGateway } from './game.gateway';
 import { GameRoomModule } from './game-room/game-room.module';
+import { GameGatewayModule } from './game/game.module';
 
 @Module({
   imports: [
@@ -24,6 +24,6 @@ import { GameRoomModule } from './game-room/game-room.module';
     MongooseModule.forRoot("mongodb://127.0.0.1/nestjs_tutorial"),
   ],
   controllers: [AppController],
-  providers: [AppService, GameGateway],
+  providers: [AppService, GameGatewayModule],
 })
 export class AppModule { }

@@ -1,4 +1,4 @@
-import { useUserContext } from '../../common/context/userContext';
+import { useUser } from '../../common/context/userContext';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import ErrorPopup from '../GenericPopup/ErrorPopup';
 import { useState, useEffect } from 'react';
@@ -11,7 +11,7 @@ type CategoryData = {
 }
 
 const GamePage: React.FC = () => {
-    const { user } = useUserContext();
+    const { user } = useUser();
     const [inputs, setInputs] = useState(Array(9).fill(''));
     const [timeLeft, setTimeLeft] = useState(60);
     const [chosenLetter, setChosenLetter] = useState('');
