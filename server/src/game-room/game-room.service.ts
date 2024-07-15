@@ -44,9 +44,7 @@ export class GameRoomService {
 
     async joinGame(joinGameData: JoinGameDTO) {
         const { gameId, playerId } = joinGameData;
-        console.log('playerId: ', playerId);
-        console.log('gameId: ', gameId);
         const updatedGame = await this.gameRoomModel.findByIdAndUpdate(gameId, { idP2: playerId, gameStatus: GameStatusEnum.InProgress }, { new: true })
-        updatedGame.idP1, updatedGame.idP2
+        this.gameGateway.startGame(updatedGame.idP1, updatedGame.idP2, gameId)
     }
 }

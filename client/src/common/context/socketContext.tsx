@@ -1,64 +1,66 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useMemo } from "react";
+import { Outlet } from "react-router-dom";
 
 import { io, Socket } from "socket.io-client";
+import { useUser } from "./userContext";
 
 const SocketContext = createContext<Socket | null>(null);
 
-const CreateSocketConnectionContext = createContext<{
-    createSocketConnection: (id?: string) => Socket | null | undefined
-} | null>(null);
-
 export const useSocket = () => {
-    const ctx = useContext(SocketContext);
-    if (!ctx) throw new Error("A context provider is missing, can't use context");
-    return ctx;
+    return useContext(SocketContext);
 }
 
-export const useCreateSocketConnection = () => {
-    const ctx = useContext(CreateSocketConnectionContext);
-    if (!ctx) throw new Error("A context provider is missing, can't use context");
-    return ctx;
-}
+const SocketProvider: React.FC = () => {
 
-const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-
-    const [socket, setSocket] = useState<Socket | null>(null);
-    const [userId, setUserId] = useState<string>();
+    const { user } = useUser();
+    const socket = useMemo<Socket | null>(createSocketConnection, [user]);
 
     useEffect(() => {
-        if (socket && userId) joinRoom()
-    }, [socket, userId])
+        function handleUnload() {
+            socket?.disconnect()
+        }
 
-    const createSocketConnection = (id?: string) => {
+        window.addEventListener("beforeunload", handleUnload);
+
+        return () => {
+            window.removeEventListener("beforeunload", handleUnload)
+        }
+    }, [])
+
+    function createSocketConnection() {
+        if (!user) return null;
         try {
-            if (id) setUserId(id)
             const domain = "http://localhost:8000";
-            if (!domain) return;
+            const newSocket = io(domain);
 
-            const socket = io(domain);
-            setSocket(socket);
-            console.log("Socket created successfully");
-            return socket;
+            newSocket.on('connect', () => {
+                console.log("Socket created successfully");
+                joinRoom(newSocket);
+            })
+
+            newSocket.on('disconnect', () => {
+                console.log("Socket disconnected");
+            })
+
+            return newSocket;
         }
         catch (err) {
             console.log(err);
+            return null;
         }
     }
 
-    const joinRoom = () => {
-        if (!socket) return;
-        socket.on('connect', () => {
-            // Join a room
-            socket.emit('joinRoom', `room-${userId}`);
-        })
-        console.log(`Joined into room-${userId}`);
+    const joinRoom = (socket: Socket) => {
+        if (!socket || !user) return;
+        socket.emit('joinRoom', `room-${user._id}`);
+        console.log(`Joined into room-${user._id}`);
     }
+
+    if (!socket) return <span>Error</span>;
 
     return (
         <SocketContext.Provider value={socket}>
-            <CreateSocketConnectionContext.Provider value={{ createSocketConnection }}>
-                {children}
-            </CreateSocketConnectionContext.Provider>
+            <Outlet />
         </SocketContext.Provider>
     )
 }

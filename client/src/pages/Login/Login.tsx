@@ -12,6 +12,7 @@ interface User {
 const Login = () => {
     const navigate = useNavigate();
     const { login, fetchStatus, isLoggedIn } = useUser();
+
     const [formData, setFormData] = useState<User>({ phoneNumber: "", password: "" });
     const [error, setError] = useState<string>("");
 

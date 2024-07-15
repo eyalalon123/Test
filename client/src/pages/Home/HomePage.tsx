@@ -1,58 +1,40 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSocket } from '../../common/context/socketContext';
 
+import { useSocket } from '../../common/context/socketContext';
+import InvitationPopup from '../GenericPopup/InvitationPopup';
 import { useUser } from '../../common/context/userContext';
 import TwoPlayer from '../Game/TwoPlayer';
-
-import InvitationPopup from '../GenericPopup/InvitationPopup';
 
 import "./homePage.scss"
 
 const HomePage = () => {
+    const socket = useSocket();
+    const navigate = useNavigate();
     const { user, logout } = useUser();
-    const socket = useSocket()
-    const [popupJoinRoom, setPopupJoinRoom] = useState(false);
     const [gameStarted, setGameStarted] = useState(false);
-
-    const navigate = useNavigate()
+    const [popupJoinRoom, setPopupJoinRoom] = useState(false);
+    const [gameId, setGameId] = useState<string>();
 
     const handleGame = () => {
         navigate('/game')
     }
 
-    if (!user) return <div>Loading...</div>;
-
-    // useEffect(() => {
-    //     try {
-    //         const data = axios.post('/api/game-room/join-game', {
-    //             playerId: user?._id,
-    //             gameId: ''
-    //         })
-    //         // console.log('data: ', data);
-    //         // console.log('user: ', user);
-    //     }
-    //     catch (err) {
-    //         console.log('err: ', err);
-    //     }
-
-    // }, [gameStarted])
-    // console.log('socket: ', socket);
-
-    socket.on('invitation-for-game', () => {
-        setPopupJoinRoom(true)
+    socket?.on('invitation-for-game', (gameId) => {
+        setGameId(gameId);
+        setPopupJoinRoom(true);
     });
 
-    // socket.on('start-game', () => {
-    // setGameStarted(true)
-    // });
+    socket?.on('start-game', () => {
+        setGameStarted(true);
+    });
 
+    if (!user) return <div>Loading...</div>;
     return (
         <>
-            {!gameStarted &&
+            {gameStarted ?
+                <TwoPlayer /> :
                 <>
-
-                    {popupJoinRoom && <InvitationPopup setGameStarted={setGameStarted} setPopUp={setPopupJoinRoom} />}
                     <div className="home-page">
                         <div className="data-container">
                             <h2>Welcome to the Home Page {user.name}</h2>
@@ -62,9 +44,11 @@ const HomePage = () => {
                             <button className='start-game-button' onClick={logout}>התנתק</button>
                         </div>
                     </div>
+                    {popupJoinRoom &&
+                        <InvitationPopup gameId={gameId} setPopUp={setPopupJoinRoom} />}
                 </>
+
             }
-            <TwoPlayer />
         </>
     );
 };

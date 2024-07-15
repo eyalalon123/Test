@@ -46,13 +46,14 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
 
     sendInvitation(opponentId: string, gameId: string) {
-        this.sendSocket(opponentId, "invitation-for-game", [{ gameId }])
+        this.sendSocket(opponentId, "invitation-for-game", gameId)
     }
 
 
     startGame(player1: string, player2: string, gameId: string) {
         this.logger.log(`Starting game with ${player1} vs ${player2}`);
 
-        this.sendSocket(player1, player2, "start-game", [{ gameId }])
+        this.sendSocket(player1, "start-game", gameId);
+        this.sendSocket(player2, "start-game", gameId)
     }
 }

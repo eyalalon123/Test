@@ -13,6 +13,7 @@ import HomePage from "./pages/Home/HomePage";
 import Page_404 from "./pages/404-Page/404";
 import GamePage from "./pages/Game/SinglePlayer";
 import OnlineGame from "./pages/OnlineGame/OnlineGame";
+import SocketProvider from "./common/context/socketContext";
 
 import "./App.scss"
 
@@ -24,9 +25,11 @@ export const router = createBrowserRouter(
       <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
-      <Route path="/home" element={<HomePage />} />,
-      <Route path="/game" element={<GamePage />} />,
-      <Route path="/online-game" element={<OnlineGame />} />,
+      <Route element={<SocketProvider />}>
+        <Route path="/home" element={<HomePage />} />
+        <Route path="/game" element={<GamePage />} />
+        <Route path="/online-game" element={<OnlineGame />} />
+      </Route>,
     ],
   ),
 );
