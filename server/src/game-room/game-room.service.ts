@@ -44,7 +44,11 @@ export class GameRoomService {
 
     async joinGame(joinGameData: JoinGameDTO) {
         const { gameId, playerId } = joinGameData;
+        const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
+        const randomIndex = Math.floor(Math.random() * hebrewLetters.length);
+        const randomLetter = hebrewLetters[randomIndex];
+
         const updatedGame = await this.gameRoomModel.findByIdAndUpdate(gameId, { idP2: playerId, gameStatus: GameStatusEnum.InProgress }, { new: true })
-        this.gameGateway.startGame(updatedGame.idP1, updatedGame.idP2, gameId)
+        this.gameGateway.startGame(updatedGame.idP1, updatedGame.idP2, gameId, randomLetter)
     }
 }

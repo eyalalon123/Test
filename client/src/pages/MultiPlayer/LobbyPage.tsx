@@ -4,15 +4,18 @@ import axios from 'axios';
 
 import { useSocket } from '../../common/context/socketContext';
 import { useUser } from '../../common/context/userContext';
-import TwoPlayer from '../Game/TwoPlayer';
+import TwoPlayer from '../Game/MultiPlayer';
 
-import './onlineGame.scss';
+import './lobbyPage.scss';
 
-const OnlineGame = () => {
+const LobbyPage = () => {
     const { user } = useUser();
     const socket = useSocket();
     const [gameStarted, setGameStarted] = useState(false);
     const [rivalUsername, setRivalUsername] = useState('');
+    const [chosenLetter, setChosenLetter] = useState('');
+    const [startTime, setStartTime] = useState<boolean>(false);
+    const [, setShowEndGamePopup] = useState(false);
 
     const invitePlayer = async () => {
         if (!rivalUsername.trim()) {
@@ -30,8 +33,10 @@ const OnlineGame = () => {
         }
     };
 
-    socket?.on('start-game', () => {
+    socket?.on('start-game', ({ randomLetter }) => {
+        setChosenLetter(randomLetter)
         setGameStarted(true);
+        setStartTime(true);
     })
 
     return (
@@ -51,10 +56,10 @@ const OnlineGame = () => {
                         </div>
                     </div>
                     :
-                    <TwoPlayer />
+                    <TwoPlayer setEndGamePopUp={setShowEndGamePopup} handleStartNewGame={() => console.log("jndnc")} text='התחל סיבוב נוסף' startTime={startTime} chosenLetter={chosenLetter} />
             }
         </>
     );
 };
 
-export default OnlineGame;
+export default LobbyPage;

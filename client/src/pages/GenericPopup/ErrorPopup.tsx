@@ -1,5 +1,6 @@
 import React from 'react';
-import './ErrorPopup.scss';
+
+import './errorPopup.scss';
 
 interface ErrorProps {
     setErrorPopUp: React.Dispatch<React.SetStateAction<boolean>>;

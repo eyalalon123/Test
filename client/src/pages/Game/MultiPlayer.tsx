@@ -2,11 +2,12 @@ import { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
-
 import { useUser } from '../../common/context/userContext';
 
-import { CATEGORIES, HEBREW_LETTERS } from './game.consts';
 import ErrorPopup from '../GenericPopup/ErrorPopup';
+import EndGamePopUp from '../GenericPopup/EndGamePopup';
+
+import { CATEGORIES } from './game.consts';
 
 import "./game.scss";
 
@@ -14,31 +15,39 @@ type CategoryData = {
     _id: string;
 }
 
-const SinglePlayer: React.FC = () => {
+type PlayersData = {
+    chosenLetter: string;
+    startTime?: boolean;
+    text: string;
+    handleStartNewGame?: () => void;
+    setEndGamePopUp: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, handleStartNewGame, setEndGamePopUp }) => {
     const { user } = useUser();
 
-    const [timeLeft, setTimeLeft] = useState(60);
-    const [chosenLetter, setChosenLetter] = useState('');
-    const [results, setResults] = useState<boolean[]>([]);
-    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
-    const [playerAnswers, setPlayerAnswers] = useState(Array(9).fill(''));
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [results, setResults] = useState<boolean[]>([]);
+    const [timeLeft, setTimeLeft] = useState(60);
+
+    const addRandomLetter = () => {
+        setResults([])
+        setInputs(Array(9).fill(''))
+    };
 
     useEffect(() => {
         if (timeLeft === 0) {
-            submitAnswers({ answers: playerAnswers, letter: chosenLetter });
+            submitAnswers({ answers: inputs, letter: chosenLetter });
             clearInterval(intervalId)
         }
     }, [timeLeft])
 
-    const addRandomLetter = () => {
-        const randomIndex = Math.floor(Math.random() * HEBREW_LETTERS.length);
-        const randomLetter = HEBREW_LETTERS[randomIndex];
-        setChosenLetter(randomLetter);
-        startTimer();
-        setResults([])
-        setPlayerAnswers(Array(9).fill(''))
-    };
+    useEffect(() => {
+        startTimer()
+    }, [startTime])
 
     const startTimer = () => {
         setTimeLeft(60);
@@ -48,12 +57,13 @@ const SinglePlayer: React.FC = () => {
             setTimeLeft(prevTime => prevTime - 1);
         }, 1000);
         setIntervalId(interval)
-    };
+    }
+
 
     const handleInputChange = (index: number, value: string) => {
-        const newInputs = [...playerAnswers];
+        const newInputs = [...inputs];
         newInputs[index] = value;
-        setPlayerAnswers(newInputs);
+        setInputs(newInputs);
     };
 
     const { data: ids } = useQuery<string[]>({
@@ -99,8 +109,9 @@ const SinglePlayer: React.FC = () => {
             setShowErrorPopup(true)
             return
         };
-        submitAnswers({ answers: playerAnswers, letter: chosenLetter });
+        submitAnswers({ answers: inputs, letter: chosenLetter });
         if (intervalId) clearInterval(intervalId);
+        setShowEndGamePopup(true);
     };
 
     if (!user) return <div>Loading...</div>;
@@ -108,6 +119,7 @@ const SinglePlayer: React.FC = () => {
     return (
         <>
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
+            {showEndGamePopup && <EndGamePopUp handleStartNewGame={handleStartNewGame} text={text} setEndGamePopUp={setEndGamePopUp} />}
             <div className="game-page">
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container'>
@@ -115,7 +127,7 @@ const SinglePlayer: React.FC = () => {
                     <p className='chosen-letter'>{chosenLetter}</p>
                 </div>
                 <div className="inputs">
-                    {playerAnswers.map((playerAnswer, index) => (
+                    {inputs.map((input, index) => (
                         <div key={index} className="input-container">
                             <label className='label-value'>{CATEGORIES[index]}</label>
                             <input
@@ -123,7 +135,7 @@ const SinglePlayer: React.FC = () => {
                                     results[index] === false ? "false-answer" : "reset-answer"
                                 }
                                 disabled={timeLeft === 0}
-                                value={playerAnswer}
+                                value={input}
                                 onChange={(e) => handleInputChange(index, e.target.value)}
                             />
                         </div>
@@ -135,4 +147,4 @@ const SinglePlayer: React.FC = () => {
     );
 };
 
-export default SinglePlayer;
+export default MultiPlayer;

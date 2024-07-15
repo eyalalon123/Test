@@ -1,9 +1,10 @@
 import React from 'react';
 
-import { useUser } from '../../common/context/userContext';
 import axios from 'axios';
 
-import './InvitationPopup.scss';
+import { useUser } from '../../common/context/userContext';
+
+import './invitationPopup.scss';
 
 interface InvitationPopupProps {
     setPopUp: React.Dispatch<React.SetStateAction<boolean>>;

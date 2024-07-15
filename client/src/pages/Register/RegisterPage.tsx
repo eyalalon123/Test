@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 
-import "./RegisterPage.scss";
+import axios from 'axios';
+import { useQuery, useMutation } from "@tanstack/react-query";
+
+import "./registerPage.scss";
 
 interface User {
     name: string;
@@ -12,7 +13,6 @@ interface User {
 }
 
 const RegisterPage = () => {
-
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
     const navigate = useNavigate();
     const [showText, setShowText] = useState<Boolean>(false);

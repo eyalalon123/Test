@@ -7,16 +7,16 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import Login from "./pages/Login/Login"
-import RegisterPage from "./pages/Register/RegisterPage";
-import HomePage from "./pages/Home/HomePage";
-import Page_404 from "./pages/404-Page/404";
-import GamePage from "./pages/Game/SinglePlayer";
-import OnlineGame from "./pages/OnlineGame/OnlineGame";
 import SocketProvider from "./common/context/socketContext";
 
-import "./App.scss"
+import RegisterPage from "./pages/Register/RegisterPage";
+import LobbyPage from "./pages/MultiPlayer/LobbyPage";
+import SinglePlayer from "./pages/Game/SinglePlayer";
+import HomePage from "./pages/Home/HomePage";
+import Page_404 from "./pages/404-Page/404";
+import Login from "./pages/Login/Login"
 
+import "./App.scss"
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -25,10 +25,11 @@ export const router = createBrowserRouter(
       <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
+
       <Route element={<SocketProvider />}>
         <Route path="/home" element={<HomePage />} />
-        <Route path="/game" element={<GamePage />} />
-        <Route path="/online-game" element={<OnlineGame />} />
+        <Route path="/single-player" element={<SinglePlayer />} />
+        <Route path="/lobby" element={<LobbyPage />} />
       </Route>,
     ],
   ),

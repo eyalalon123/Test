@@ -1,5 +1,6 @@
-import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
+
 import { useUser } from "../../common/context/userContext";
 
 import "./login.scss";
@@ -37,7 +38,7 @@ const Login = () => {
     };
 
     if (fetchStatus === "pending") {
-        return null; //return loading | landing
+        return null;
     }
 
     if (isLoggedIn()) {

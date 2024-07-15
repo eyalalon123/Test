@@ -2,22 +2,26 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { useSocket } from '../../common/context/socketContext';
-import InvitationPopup from '../GenericPopup/InvitationPopup';
 import { useUser } from '../../common/context/userContext';
-import TwoPlayer from '../Game/TwoPlayer';
+
+import MultiPlayer from '../Game/MultiPlayer';
+import InvitationPopup from '../GenericPopup/InvitationPopup';
 
 import "./homePage.scss"
 
 const HomePage = () => {
-    const socket = useSocket();
-    const navigate = useNavigate();
     const { user, logout } = useUser();
-    const [gameStarted, setGameStarted] = useState(false);
+    const navigate = useNavigate();
+    const socket = useSocket();
+
     const [popupJoinRoom, setPopupJoinRoom] = useState(false);
+    const [gameStarted, setGameStarted] = useState(false);
+    const [chosenLetter, setChosenLetter] = useState('');
+    const [, setShowEndGamePopup] = useState(false);
     const [gameId, setGameId] = useState<string>();
 
     const handleGame = () => {
-        navigate('/game')
+        navigate('/single-player')
     }
 
     socket?.on('invitation-for-game', (gameId) => {
@@ -25,7 +29,9 @@ const HomePage = () => {
         setPopupJoinRoom(true);
     });
 
-    socket?.on('start-game', () => {
+    socket?.on('start-game', ({ gameId, randomLetter }) => {
+        setChosenLetter(randomLetter)
+        setGameId(gameId);
         setGameStarted(true);
     });
 
@@ -33,13 +39,13 @@ const HomePage = () => {
     return (
         <>
             {gameStarted ?
-                <TwoPlayer /> :
+                <MultiPlayer setEndGamePopUp={setShowEndGamePopup} text='המתן להתחלת סיבוב חדש על ידי המשתמש הראשי' chosenLetter={chosenLetter} /> :
                 <>
                     <div className="home-page">
                         <div className="data-container">
                             <h2>Welcome to the Home Page {user.name}</h2>
                             <button className='start-game-button' onClick={handleGame}>התחל משחק יחיד</button>
-                            <button className='start-game-button' onClick={() => navigate('/online-game')}>שחק עם חבר</button>
+                            <button className='start-game-button' onClick={() => navigate('/lobby')}>שחק עם חבר</button>
                             <button className='start-game-button' onClick={() => console.log("gg")}>טבלת ניקוד</button>
                             <button className='start-game-button' onClick={logout}>התנתק</button>
                         </div>

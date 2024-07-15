@@ -41,8 +41,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         this.server.to(room).emit('message', `${client} has left the room ${room}`);
     }
 
-    sendSocket(playerId: string, event: string, ...args: any[]) {
-        this.server.to(`room-${playerId}`).emit(event, ...args)
+    sendSocket(playerId: string, event: string, payload: Record<string, any> | string) {
+        this.server.to(`room-${playerId}`).emit(event, payload)
     }
 
     sendInvitation(opponentId: string, gameId: string) {
@@ -50,10 +50,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     }
 
 
-    startGame(player1: string, player2: string, gameId: string) {
+    startGame(player1: string, player2: string, gameId: string, randomLetter: string) {
         this.logger.log(`Starting game with ${player1} vs ${player2}`);
 
-        this.sendSocket(player1, "start-game", gameId);
-        this.sendSocket(player2, "start-game", gameId)
+        this.sendSocket(player1, "start-game", { gameId, randomLetter });
+        this.sendSocket(player2, "start-game", { gameId, randomLetter })
     }
 }
