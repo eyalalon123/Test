@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
-import { useUser } from '../../common/context/userContext';
+import { useUser } from '../../common/context/UserContext';
+import { useSocket } from '../../common/context/SocketContext';
 
 import ErrorPopup from '../GenericPopup/ErrorPopup';
 import EndGamePopUp from '../GenericPopup/EndGamePopup';
@@ -10,6 +11,7 @@ import EndGamePopUp from '../GenericPopup/EndGamePopup';
 import { CATEGORIES } from './game.consts';
 
 import "./game.scss";
+import { useGame } from '../../common/context/GameContext';
 
 type CategoryData = {
     _id: string;
@@ -23,20 +25,23 @@ type PlayersData = {
     setEndGamePopUp: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
+type ResultsData = {
+    results: boolean[],
+    score: number,
+}
+
 const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, handleStartNewGame, setEndGamePopUp }) => {
     const { user } = useUser();
+    const socket = useSocket();
+    const { gameId } = useGame()
 
     const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
+    const [pointsResults, setPointResults] = useState<number>(0);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const [inputs, setInputs] = useState(Array(9).fill(''));
     const [results, setResults] = useState<boolean[]>([]);
     const [timeLeft, setTimeLeft] = useState(60);
-
-    const addRandomLetter = () => {
-        setResults([])
-        setInputs(Array(9).fill(''))
-    };
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -79,7 +84,7 @@ const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, han
         },
     });
 
-    const { mutate: submitAnswers } = useMutation<boolean[], Error, { answers: string[], letter: string }>({
+    const { mutate: submitAnswers } = useMutation<ResultsData, Error, { answers: string[], letter: string }>({
         mutationFn: async ({ answers, letter }) => {
             try {
                 if (!ids) throw new Error('Category IDs not available');
@@ -89,22 +94,27 @@ const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, han
                     answer: answers[index],
                 }));
 
-                const response = await axios.post('/api/games/submit', { answers: payload, letter });
-
-                return response.data;
+                const { data } = await axios.post<ResultsData>('/api/game-room/end-game', {
+                    answers: payload,
+                    letter,
+                    playerId: user?._id,
+                    gameId: gameId,
+                });
+                return data;
             } catch (error) {
                 throw new Error('Failed to submit answers');
             }
         },
-        onSuccess: (data) => {
-            setResults(data);
+        onSuccess: ({ results, score }) => {
+            setPointResults(score)
+            setResults(results);
         },
         onError: (error) => {
             console.error('Error submitting answers:', error);
         },
     });
 
-    const finishGame = () => {
+    const handleFinishGame = () => {
         if (!chosenLetter) {
             setShowErrorPopup(true)
             return
@@ -114,16 +124,19 @@ const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, han
         setShowEndGamePopup(true);
     };
 
+    socket?.on('end-game', () => {
+    })
+
     if (!user) return <div>Loading...</div>;
 
     return (
         <>
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
-            {showEndGamePopup && <EndGamePopUp handleStartNewGame={handleStartNewGame} text={text} setEndGamePopUp={setEndGamePopUp} />}
+            {/* {showEndGamePopup && <EndGamePopUp handleStartNewGame={handleStartNewGame} text={text} setEndGamePopUp={setEndGamePopUp} />} */}
             <div className="game-page">
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container'>
-                    <button className='random-letter-button' onClick={addRandomLetter}>בחירת אות אקראית</button>
+                    {/* <button className='random-letter-button' onClick={addRandomLetter}>בחירת אות אקראית</button> */}
                     <p className='chosen-letter'>{chosenLetter}</p>
                 </div>
                 <div className="inputs">
@@ -141,7 +154,7 @@ const MultiPlayer: React.FC<PlayersData> = ({ chosenLetter, startTime, text, han
                         </div>
                     ))}
                 </div>
-                <button className='send-button' onClick={finishGame}>שליחה</button>
+                <button className='send-button' onClick={handleFinishGame}>שליחה</button>
             </div>
         </>
     );

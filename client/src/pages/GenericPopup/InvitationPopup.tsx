@@ -2,7 +2,7 @@ import React from 'react';
 
 import axios from 'axios';
 
-import { useUser } from '../../common/context/userContext';
+import { useUser } from '../../common/context/UserContext';
 
 import './invitationPopup.scss';
 

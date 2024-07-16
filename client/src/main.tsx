@@ -2,7 +2,7 @@ import ReactDOM from 'react-dom/client';
 
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 
-import UserProvider from './common/context/userContext';
+import UserProvider from './common/context/UserContext';
 import App from './App';
 
 import { wrap } from '@hilma/tools';

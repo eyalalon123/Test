@@ -8,23 +8,27 @@ export enum GameStatusEnum {
     GameOver = "GAME_OVER"
 }
 
+export class Result {
+    resultsP1?: number
+    resultsP2?: number
+}
+
 @Schema({ versionKey: false })
 export class GameRoom {
 
     @Prop({ type: mongoose.Schema.Types.ObjectId, auto: true })
     _id: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId })
+    @Prop({ type: String })
     idP1: string;
 
-    @Prop({ type: mongoose.Schema.Types.ObjectId })
+    @Prop({ type: String })
     idP2: string;
 
     @Prop({ enum: GameStatusEnum })
-    gameStatus: string;
+    gameStatus: GameStatusEnum;
 
-    @Prop({ type: [String] })
-    results: string[];
+    @Prop({ type: [Result] })
+    results: Result[];
 }
-
 export const GameRoomSchema = SchemaFactory.createForClass(GameRoom);

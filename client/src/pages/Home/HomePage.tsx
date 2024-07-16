@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useGame } from '../../common/context/GameContext';
 
-import { useSocket } from '../../common/context/socketContext';
-import { useUser } from '../../common/context/userContext';
+import { useSocket } from '../../common/context/SocketContext';
+import { useUser } from '../../common/context/UserContext';
 
 import MultiPlayer from '../Game/MultiPlayer';
 import InvitationPopup from '../GenericPopup/InvitationPopup';
@@ -10,6 +11,7 @@ import InvitationPopup from '../GenericPopup/InvitationPopup';
 import "./homePage.scss"
 
 const HomePage = () => {
+    const { gameId, setGameId } = useGame();
     const { user, logout } = useUser();
     const navigate = useNavigate();
     const socket = useSocket();
@@ -18,7 +20,6 @@ const HomePage = () => {
     const [gameStarted, setGameStarted] = useState(false);
     const [chosenLetter, setChosenLetter] = useState('');
     const [, setShowEndGamePopup] = useState(false);
-    const [gameId, setGameId] = useState<string>();
 
     const handleGame = () => {
         navigate('/single-player')

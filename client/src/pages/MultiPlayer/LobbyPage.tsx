@@ -2,19 +2,23 @@ import { useState } from 'react';
 
 import axios from 'axios';
 
-import { useSocket } from '../../common/context/socketContext';
-import { useUser } from '../../common/context/userContext';
-import TwoPlayer from '../Game/MultiPlayer';
+import { useSocket } from '../../common/context/SocketContext';
+import { useGame } from '../../common/context/GameContext';
+import { useUser } from '../../common/context/UserContext';
+
+import MultiPlayer from '../Game/MultiPlayer';
 
 import './lobbyPage.scss';
 
 const LobbyPage = () => {
+    const { setGameId } = useGame();
     const { user } = useUser();
     const socket = useSocket();
+
+    const [startTime, setStartTime] = useState<boolean>(false);
     const [gameStarted, setGameStarted] = useState(false);
     const [rivalUsername, setRivalUsername] = useState('');
     const [chosenLetter, setChosenLetter] = useState('');
-    const [startTime, setStartTime] = useState<boolean>(false);
     const [, setShowEndGamePopup] = useState(false);
 
     const invitePlayer = async () => {
@@ -33,10 +37,11 @@ const LobbyPage = () => {
         }
     };
 
-    socket?.on('start-game', ({ randomLetter }) => {
+    socket?.on('start-game', ({ randomLetter, gameId }) => {
         setChosenLetter(randomLetter)
         setGameStarted(true);
         setStartTime(true);
+        setGameId(gameId)
     })
 
     return (
@@ -56,7 +61,7 @@ const LobbyPage = () => {
                         </div>
                     </div>
                     :
-                    <TwoPlayer setEndGamePopUp={setShowEndGamePopup} handleStartNewGame={() => console.log("jndnc")} text='התחל סיבוב נוסף' startTime={startTime} chosenLetter={chosenLetter} />
+                    <MultiPlayer setEndGamePopUp={setShowEndGamePopup} text='התחל סיבוב נוסף' startTime={startTime} chosenLetter={chosenLetter} />
             }
         </>
     );

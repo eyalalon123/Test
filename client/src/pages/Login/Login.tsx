@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 
-import { useUser } from "../../common/context/userContext";
+import { useUser } from "../../common/context/UserContext";
 
 import "./login.scss";
 

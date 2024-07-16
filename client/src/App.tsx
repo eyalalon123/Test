@@ -7,8 +7,7 @@ import {
   createRoutesFromElements,
 } from "react-router-dom";
 
-import SocketProvider from "./common/context/socketContext";
-
+import ContextManager from "./common/ContextManager";
 import RegisterPage from "./pages/Register/RegisterPage";
 import LobbyPage from "./pages/MultiPlayer/LobbyPage";
 import SinglePlayer from "./pages/Game/SinglePlayer";
@@ -26,7 +25,7 @@ export const router = createBrowserRouter(
       <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
 
-      <Route element={<SocketProvider />}>
+      <Route element={<ContextManager />}>
         <Route path="/home" element={<HomePage />} />
         <Route path="/single-player" element={<SinglePlayer />} />
         <Route path="/lobby" element={<LobbyPage />} />

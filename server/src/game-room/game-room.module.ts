@@ -7,6 +7,7 @@ import { GameRoomService } from './game-room.service';
 
 import { AuthModule } from 'src/auth/auth.module';
 import { GameGatewayModule } from 'src/game/game.module';
+import { CategoriesModule } from 'src/categories/categories.module';
 
 @Module({
   imports: [
@@ -14,9 +15,10 @@ import { GameGatewayModule } from 'src/game/game.module';
       { name: GameRoom.name, schema: GameRoomSchema },
     ]),
     AuthModule,
+    CategoriesModule,
     GameGatewayModule,
   ],
   controllers: [GameRoomController],
-  providers: [GameRoomService]
+  providers: [GameRoomService],
 })
 export class GameRoomModule { }

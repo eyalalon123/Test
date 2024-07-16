@@ -1,8 +1,7 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
-import { Outlet } from "react-router-dom";
 
 import { io, Socket } from "socket.io-client";
-import { useUser } from "./userContext";
+import { useUser } from "./UserContext";
 
 const SocketContext = createContext<Socket | null>(null);
 
@@ -10,7 +9,7 @@ export const useSocket = () => {
     return useContext(SocketContext);
 }
 
-const SocketProvider: React.FC = () => {
+const SocketProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
 
     const { user } = useUser();
     const socket = useMemo<Socket | null>(createSocketConnection, [user]);
@@ -60,7 +59,7 @@ const SocketProvider: React.FC = () => {
 
     return (
         <SocketContext.Provider value={socket}>
-            <Outlet />
+            {children}
         </SocketContext.Provider>
     )
 }
