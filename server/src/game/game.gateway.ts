@@ -63,10 +63,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         this.sendSocket(player2, "start-game", { gameId, randomLetter, opponentId: player1 })
     }
 
-    endGame(player1: string, player2: string, gameId: string, resultsP1: number, resultsP2: number) {
+    endGame(player1: string, player2: string, gameId: string, resultsP1: number, resultsP2: number, createdName: string, invitedName: string) {
         this.logger.log(`Ending game with ${player1} vs ${player2}`);
 
-        this.sendSocket(player1, "end-game", { gameId, resultsP2, resultsP1, player2 });
-        this.sendSocket(player2, "end-game", { gameId, resultsP1, resultsP2, player1 })
+        this.sendSocket(player1, "end-game", { gameId, resultsP2, resultsP1, player2, createdName, invitedName });
+        this.sendSocket(player2, "end-game", { gameId, resultsP1, resultsP2, player1, createdName, invitedName })
     }
 }

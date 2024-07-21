@@ -19,8 +19,8 @@ export const EndGamePopUp: React.FC<EndGameProps> = ({ scoreP1, scoreP2, handleI
             <div className="end-game-popup">
                 <div className="end-game-container">
                     <div>{scoreP1 === scoreP2 ? 'המשחק נגמר בתיקו' : scoreP1 > scoreP2 ? '' : scoreP2 > scoreP1 ? '' : ''}</div>
-                    <p>{scoreP1}</p>
                     <p>{scoreP2}</p>
+                    <p>{scoreP1}</p>
                     {isNewRound ?
                         <button className="invitation-game-button" onClick={handleStartNewGame}>הוזמנת למשחק חדש לחץ כאן לאישור</button>
                         :

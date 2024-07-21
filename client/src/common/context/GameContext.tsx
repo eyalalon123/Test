@@ -3,30 +3,31 @@ import { useNavigate } from "react-router-dom";
 import { useSocket } from "./SocketContext";
 
 interface GameIdContext {
-    gameId: string | undefined,
+    gameId: string | undefined;
     chosenLetter: string | undefined;
     gameStatus: GameStatusEnum | undefined;
     opponentId: string | undefined;
     isNewRound: boolean;
     showEndGamePopup: boolean;
-    results: boolean[];
     timeLeft: number;
-    inputs: any[];
+    startGame: (randomLetter: string, gameId: string, opponentId: string) => void;
+    scoreP1: number;
+    scoreP2: number;
 }
 
 export enum GameStatusEnum {
     Pending = "PENDING",
     InProgress = "IN_PROGRESS",
-    GameOver = "GAME_OVER"
+    GameOver = "GAME_OVER",
 }
 
 const GameContext = createContext<GameIdContext | null>(null);
 
 export const useGame = () => {
     const ctx = useContext(GameContext);
-    if (!ctx) throw new Error("A user context provider is missing, can't use context");
+    if (!ctx) throw new Error("A game context provider is missing, can't use context");
     return ctx;
-}
+};
 
 const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const socket = useSocket();
@@ -37,44 +38,66 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     const [opponentId, setOpponentId] = useState<string>();
     const [isNewRound, setIsNewRound] = useState<boolean>(false);
     const [showEndGamePopup, setShowEndGamePopup] = useState(false);
-    const [results, setResults] = useState<boolean[]>([]);
     const [timeLeft, setTimeLeft] = useState(60);
-    const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
-    const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+    const [, setResults] = useState<boolean[]>([]);
+    const [scoreP1, setScoreP1] = useState(0);
+    const [scoreP2, setScoreP2] = useState(0);
+
 
     useEffect(() => {
         if (timeLeft === 0) {
             setTimeLeft(60);
             clearInterval(intervalId);
         }
-    }, [timeLeft])
+    }, [timeLeft, intervalId]);
 
     useEffect(() => {
         if (!socket) return;
 
-        socket.on('start-game', ({ randomLetter, gameId, opponentId }) => {
-            setGameStatus(GameStatusEnum.InProgress);
-            setChosenLetter(randomLetter)
-            setGameId(gameId);
+        const handleStartGame = ({ randomLetter, gameId, opponentId }: any) => {
             navigate('/multi-player');
-            setShowEndGamePopup(false)
-            setResults([])
-            setInputs(Array(9).fill(''))
-            setOpponentId(opponentId);
-            startTimer();
-            setIsNewRound(false);
-        })
+            startGame(randomLetter, gameId, opponentId);
+            setResults([]);
+        };
 
-        socket.on('invitation-for-game', ({ gameId: inviteGameId }) => {
+        const handleInvitationForGame = ({ gameId: inviteGameId }: any) => {
             if (inviteGameId === gameId) {
                 setIsNewRound(true);
+            } else {
+                setGameId(inviteGameId);
             }
-            else setGameId(inviteGameId);
-        });
-        return () => {
-            socket.off('start-game');
         };
-    }, [socket]);
+
+        const handleEndGame = ({ resultsP1, resultsP2, opponentName, invitedName }: any) => {
+            console.log('invitedName: ', invitedName);
+            console.log('opponentName: ', opponentName);
+            clearInterval(intervalId);
+            setShowEndGamePopup(true);
+            setScoreP1(resultsP1)
+            setScoreP2(resultsP2)
+        };
+
+        socket.on('start-game', handleStartGame);
+        socket.on('invitation-for-game', handleInvitationForGame);
+        socket.on('end-game', handleEndGame);
+
+        return () => {
+            socket.off('start-game', handleStartGame);
+            socket.off('invitation-for-game', handleInvitationForGame);
+            socket.off('end-game', handleEndGame);
+        };
+    }, [socket, navigate, intervalId, gameId]);
+
+    const startGame = (randomLetter: string, gameId: string, opponentId: string) => {
+        setGameStatus(GameStatusEnum.InProgress);
+        setChosenLetter(randomLetter);
+        setGameId(gameId);
+        setShowEndGamePopup(false);
+        setOpponentId(opponentId);
+        startTimer();
+        setIsNewRound(false);
+    };
 
     const startTimer = () => {
         if (intervalId) {
@@ -83,20 +106,22 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         }
 
         const interval = setInterval(() => {
-            setTimeLeft(prevTime => prevTime - 1);
+            setTimeLeft((prevTime) => prevTime - 1);
         }, 1000);
-        setIntervalId(interval)
-    }
+        setIntervalId(interval);
+    };
 
-    socket?.on('end-game', () => {
-        clearInterval(intervalId);
-        setShowEndGamePopup(true)
-    })
+    useEffect(() => {
+        return () => {
+            if (intervalId) clearInterval(intervalId);
+        };
+    }, [intervalId]);
 
     return (
-        <GameContext.Provider value={{ results, inputs, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
+        <GameContext.Provider value={{ scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
             {children}
         </GameContext.Provider>
-    )
-}
+    );
+};
+
 export default GameProvider;

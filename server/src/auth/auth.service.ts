@@ -7,7 +7,6 @@ import { Users } from './schemas/auth.schema';
 import * as bcrypt from 'bcryptjs'
 import { JwtService } from '@nestjs/jwt'
 import { Response } from 'express';
-import { userDTO } from 'src/users/DTO/user.dto';
 
 @Injectable()
 export class AuthService {

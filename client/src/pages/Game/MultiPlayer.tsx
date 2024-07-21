@@ -6,7 +6,6 @@ import axios from 'axios';
 
 import { useUser } from '../../common/context/UserContext';
 import { useGame } from '../../common/context/GameContext';
-import { useSocket } from '../../common/context/SocketContext';
 
 import ErrorPopup from '../GenericPopup/ErrorPopup';
 import EndGamePopUp from '../GenericPopup/EndGamePopup';
@@ -22,15 +21,12 @@ type ResultsData = {
 
 const MultiPlayer: React.FC = () => {
     const { user } = useUser();
-    const socket = useSocket();
     const navigate = useNavigate();
-    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, results, inputs } = useGame()
+    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, scoreP1, scoreP2 } = useGame()
     const [, setPointResults] = useState<number>(0);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-    const [, setInputs] = useState(Array(9).fill(''));
-    const [, setResults] = useState<boolean[]>([]);
-    const [scoreP1, setScoreP1] = useState(0);
-    const [scoreP2, setScoreP2] = useState(0);
+    const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [results, setResults] = useState<boolean[]>([]);
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -95,11 +91,6 @@ const MultiPlayer: React.FC = () => {
         submitAnswers({ answers: inputs, letter: chosenLetter });
     };
 
-    socket?.on('end-game', ({ resultsP1, resultsP2 }) => {
-        setScoreP1(resultsP1)
-        setScoreP2(resultsP2)
-    })
-
     const handleInviteNewGame = async () => {
         try {
             await axios.post('/api/game-room/new-round', {
@@ -129,7 +120,7 @@ const MultiPlayer: React.FC = () => {
         navigate('/home')
     }
 
-    if (!chosenLetter) return <div>Loading...</div>;
+    if (!chosenLetter) handleUserGoBackHome();
     if (!user) return <div>Loading...</div>;
 
     return (

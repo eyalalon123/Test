@@ -9,6 +9,7 @@ import { GameGateway } from 'src/game/game.gateway';
 
 import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { GameRoom, GameStatusEnum, Result } from './schemas/game-room.schema';
+import { Users } from 'src/auth/schemas/auth.schema';
 
 @Injectable()
 export class GameRoomService {
@@ -17,7 +18,12 @@ export class GameRoomService {
         private readonly gameGateway: GameGateway,
         private readonly authService: AuthService,
         private readonly categoriesService: CategoriesService,
+
     ) { }
+
+    // async getUserName(name: string) {
+    //     return username.name
+    // }
 
     async createGame(createGameData: CreateGameDTO) {
         try {
@@ -59,6 +65,8 @@ export class GameRoomService {
     async endGame(endGameDTO: EndGameDTO) {
 
         const { gameId, playerId, answers, letter } = endGameDTO;
+
+
         try {
             // get results 
             const playerResults = await this.getResults(answers, letter)
@@ -68,6 +76,11 @@ export class GameRoomService {
             // get game room
             const gameRoom = await this.gameRoomModel.findById(gameId);
             const { idP1, idP2, results } = gameRoom;
+
+            const user1 = await this.authService.getUserById(idP1);
+            const createdName = user1.user.name
+            const user2 = await this.authService.getUserById(idP2);
+            const invitedName = user2.user.name
 
             // if data missing throw error
             if (!gameRoom) throw new BadRequestException('Game room not found');
@@ -86,7 +99,7 @@ export class GameRoomService {
             lastResult = results[results.length - 1];
             if (lastResult.resultsP1 !== undefined && lastResult.resultsP2 !== undefined) {
                 gameRoom.gameStatus = GameStatusEnum.GameOver;
-                this.gameGateway.endGame(idP1, idP2, gameId, lastResult.resultsP1, lastResult.resultsP2)
+                this.gameGateway.endGame(idP1, idP2, gameId, lastResult.resultsP1, lastResult.resultsP2, createdName, invitedName)
             }
 
             // update the game room with the new results
@@ -109,6 +122,7 @@ export class GameRoomService {
 
     updateResult(results: Result[], resultFor: "resultsP1" | "resultsP2", score: number) {
         const lastResult = results[results.length - 1];
+        console.log('lastResult: ', lastResult);
 
         if (lastResult[resultFor]) {
             if (!lastResult[resultFor === "resultsP1" ? "resultsP2" : "resultsP1"]) throw new BadRequestException('Results are sent already.')
