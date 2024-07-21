@@ -3,6 +3,7 @@ import React from 'react';
 import axios from 'axios';
 
 import { useUser } from '../../common/context/UserContext';
+import { useGame } from '../../common/context/GameContext';
 
 import './invitationPopup.scss';
 
@@ -13,6 +14,7 @@ interface InvitationPopupProps {
 
 export const InvitationPopup: React.FC<InvitationPopupProps> = ({ setPopUp, gameId }) => {
     const { user } = useUser();
+    const { opponentName } = useGame()
 
     const handleStartGame = () => {
         if (!user || !gameId) return;
@@ -32,7 +34,7 @@ export const InvitationPopup: React.FC<InvitationPopupProps> = ({ setPopUp, game
         <div className="invitation-popup-overlay" onClick={() => setPopUp(false)}>
             <div className="invitation-popup" onClick={(e) => e.stopPropagation()}>
                 <div className="popup-container">
-                    <p>הזמינו אותך למשחק</p>
+                    <p>הזמין אותך למשחק {opponentName}</p>
                     <button className="confirm-invitation-button" onClick={handleStartGame}>אישור</button>
                     <button className="cancel-invitation-button" onClick={() => setPopUp(false)}>ביטול</button>
                 </div>

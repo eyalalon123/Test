@@ -30,6 +30,8 @@ export class GameRoomService {
                 idP2: opponentId,
                 gameStatus: GameStatusEnum.Pending,
             }
+            const user1 = await this.authService.getUserById(playerId);
+            const createdName = user1.user.name
 
             // create new game object 
             const newGame = new this.gameRoomModel(newGameData);
@@ -38,7 +40,7 @@ export class GameRoomService {
             const createdGame = await newGame.save();
 
             // send invitation to the opponent
-            this.gameGateway.sendInvitation(opponentId.toString(), createdGame._id)
+            this.gameGateway.sendInvitation(opponentId.toString(), createdGame._id, createdName)
 
         }
         catch (err) {
@@ -127,10 +129,13 @@ export class GameRoomService {
 
     async newRound(newRoundDTO: NewRoundDTO) {
         try {
-            const { opponentId, gameId } = newRoundDTO;
+            const { opponentId, gameId, playerId } = newRoundDTO;
+
+            const user1 = await this.authService.getUserById(playerId);
+            const createdName = user1.user.name
 
             // send invitation to the opponent
-            this.gameGateway.sendInvitation(opponentId.toString(), gameId)
+            this.gameGateway.sendInvitation(opponentId.toString(), gameId, createdName)
         }
         catch (err) {
             console.log('Error trying to create game: ', err);

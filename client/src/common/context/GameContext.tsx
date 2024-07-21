@@ -71,10 +71,12 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
             startGame(randomLetter, gameId, opponentId);
         };
 
-        const handleInvitationForGame = ({ gameId: inviteGameId }: any) => {
+        const handleInvitationForGame = ({ gameId: inviteGameId, createdName }: any) => {
             if (inviteGameId === gameId) {
+                setOpponentName(createdName)
                 setIsNewRound(true);
             } else {
+                setOpponentName(createdName)
                 setGameId(inviteGameId);
             }
         };
