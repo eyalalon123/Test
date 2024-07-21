@@ -9,7 +9,6 @@ import { GameGateway } from 'src/game/game.gateway';
 
 import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { GameRoom, GameStatusEnum, Result } from './schemas/game-room.schema';
-import { Users } from 'src/auth/schemas/auth.schema';
 
 @Injectable()
 export class GameRoomService {
@@ -20,10 +19,6 @@ export class GameRoomService {
         private readonly categoriesService: CategoriesService,
 
     ) { }
-
-    // async getUserName(name: string) {
-    //     return username.name
-    // }
 
     async createGame(createGameData: CreateGameDTO) {
         try {
@@ -122,7 +117,6 @@ export class GameRoomService {
 
     updateResult(results: Result[], resultFor: "resultsP1" | "resultsP2", score: number) {
         const lastResult = results[results.length - 1];
-        console.log('lastResult: ', lastResult);
 
         if (lastResult[resultFor]) {
             if (!lastResult[resultFor === "resultsP1" ? "resultsP2" : "resultsP1"]) throw new BadRequestException('Results are sent already.')

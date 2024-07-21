@@ -22,11 +22,8 @@ type ResultsData = {
 const MultiPlayer: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
-    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, scoreP1, scoreP2 } = useGame()
-    const [, setPointResults] = useState<number>(0);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-    const [inputs, setInputs] = useState(Array(9).fill(''));
-    const [results, setResults] = useState<boolean[]>([]);
+    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, results, setResults, inputs, setInputs, setPointResults } = useGame()
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -126,7 +123,7 @@ const MultiPlayer: React.FC = () => {
     return (
         <>
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
-            {showEndGamePopup && <EndGamePopUp handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} scoreP2={scoreP2} scoreP1={scoreP1} />}
+            {showEndGamePopup && <EndGamePopUp handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} />}
             <div className="game-page">
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container'>

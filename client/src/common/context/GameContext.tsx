@@ -13,6 +13,14 @@ interface GameIdContext {
     startGame: (randomLetter: string, gameId: string, opponentId: string) => void;
     scoreP1: number;
     scoreP2: number;
+    results: boolean[];
+    setResults: React.Dispatch<React.SetStateAction<boolean[]>>;
+    opponentName: string;
+    createdName: string;
+    inputs: any[];
+    setInputs: React.Dispatch<React.SetStateAction<any[]>>;
+    pointResults: number;
+    setPointResults: React.Dispatch<React.SetStateAction<number>>;
 }
 
 export enum GameStatusEnum {
@@ -40,10 +48,13 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [timeLeft, setTimeLeft] = useState(60);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
-    const [, setResults] = useState<boolean[]>([]);
     const [scoreP1, setScoreP1] = useState(0);
     const [scoreP2, setScoreP2] = useState(0);
-
+    const [results, setResults] = useState<boolean[]>([]);
+    const [opponentName, setOpponentName] = useState<string>('');
+    const [createdName, setCreatedName] = useState<string>('');
+    const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [pointResults, setPointResults] = useState<number>(0);
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -58,7 +69,6 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         const handleStartGame = ({ randomLetter, gameId, opponentId }: any) => {
             navigate('/multi-player');
             startGame(randomLetter, gameId, opponentId);
-            setResults([]);
         };
 
         const handleInvitationForGame = ({ gameId: inviteGameId }: any) => {
@@ -69,9 +79,9 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
             }
         };
 
-        const handleEndGame = ({ resultsP1, resultsP2, opponentName, invitedName }: any) => {
-            console.log('invitedName: ', invitedName);
-            console.log('opponentName: ', opponentName);
+        const handleEndGame = ({ resultsP1, resultsP2, createdName, invitedName }: any) => {
+            setCreatedName(createdName)
+            setOpponentName(invitedName)
             clearInterval(intervalId);
             setShowEndGamePopup(true);
             setScoreP1(resultsP1)
@@ -96,6 +106,11 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         setShowEndGamePopup(false);
         setOpponentId(opponentId);
         startTimer();
+        setResults([])
+        setInputs(Array(9).fill(''))
+        setScoreP1(0)
+        setScoreP2(0)
+        setPointResults(0)
         setIsNewRound(false);
     };
 
@@ -118,7 +133,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     }, [intervalId]);
 
     return (
-        <GameContext.Provider value={{ scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
+        <GameContext.Provider value={{ pointResults, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
             {children}
         </GameContext.Provider>
     );
