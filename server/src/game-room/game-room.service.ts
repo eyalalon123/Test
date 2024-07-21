@@ -7,7 +7,7 @@ import { CategoriesService } from 'src/categories/categories.service';
 import { AuthService } from 'src/auth/auth.service';
 import { GameGateway } from 'src/game/game.gateway';
 
-import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO } from './DTO/game-room.dto';
+import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { GameRoom, GameStatusEnum, Result } from './schemas/game-room.schema';
 
 @Injectable()
@@ -26,7 +26,7 @@ export class GameRoomService {
 
             const newGameData = {
                 idP1: playerId,
-                idP2: null,
+                idP2: opponentId,
                 gameStatus: GameStatusEnum.Pending,
             }
 
@@ -47,16 +47,17 @@ export class GameRoomService {
     }
 
     async joinGame(joinGameData: JoinGameDTO) {
-        const { gameId, playerId } = joinGameData;
+        const { gameId } = joinGameData;
         const hebrewLetters = ['א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ', 'ק', 'ר', 'ש', 'ת'];
         const randomIndex = Math.floor(Math.random() * hebrewLetters.length);
         const randomLetter = hebrewLetters[randomIndex];
 
-        const updatedGame = await this.gameRoomModel.findByIdAndUpdate(gameId, { idP2: playerId, gameStatus: GameStatusEnum.InProgress }, { new: true })
+        const updatedGame = await this.gameRoomModel.findByIdAndUpdate(gameId, { gameStatus: GameStatusEnum.InProgress }, { new: true })
         this.gameGateway.startGame(updatedGame.idP1, updatedGame.idP2, gameId, randomLetter)
     }
 
     async endGame(endGameDTO: EndGameDTO) {
+
         const { gameId, playerId, answers, letter } = endGameDTO;
         try {
             // get results 
@@ -83,7 +84,7 @@ export class GameRoomService {
 
             // if they both ends the game send socket 
             lastResult = results[results.length - 1];
-            if (lastResult.resultsP1 && lastResult.resultsP2) {
+            if (lastResult.resultsP1 !== undefined && lastResult.resultsP2 !== undefined) {
                 gameRoom.gameStatus = GameStatusEnum.GameOver;
                 this.gameGateway.endGame(idP1, idP2, gameId, lastResult.resultsP1, lastResult.resultsP2)
             }
@@ -115,6 +116,17 @@ export class GameRoomService {
         }
         else lastResult[resultFor] = score;
     }
+
+    async newRound(newRoundDTO: NewRoundDTO) {
+        try {
+            const { opponentId, gameId } = newRoundDTO;
+
+            // send invitation to the opponent
+            this.gameGateway.sendInvitation(opponentId.toString(), gameId)
+        }
+        catch (err) {
+            console.log('Error trying to create game: ', err);
+            throw err;
+        }
+    }
 }
-
-

@@ -54,9 +54,27 @@
             padding: 10px;
             cursor: pointer;
             border-radius: 4px;
+            margin-top: 5px;
         }
 
         .end-game-button:hover {
+            background-color: #a94442;
+        }
+
+        .invitation-game-button {
+            height: 20%;
+            width: 60%;
+            font-family: 'Rubik', sans-serif;
+            color: #424242;
+            background-color: #160102;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .invitation-game-button:hover {
             background-color: #a94442;
         }
     }

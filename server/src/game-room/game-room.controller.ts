@@ -1,6 +1,6 @@
 import { Body, Controller, Post } from '@nestjs/common';
 import { GameRoomService } from './game-room.service';
-import { CreateGameDTO, EndGameDTO, JoinGameDTO } from './DTO/game-room.dto';
+import { CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
 
 @Controller('api/game-room')
 export class GameRoomController {
@@ -19,5 +19,10 @@ export class GameRoomController {
     @Post('/end-game')
     endGame(@Body() endGameDTO: EndGameDTO) {
         return this.gameRoomService.endGame(endGameDTO);
+    }
+
+    @Post('/new-round')
+    newRound(@Body() newRoundDTO: NewRoundDTO) {
+        return this.gameRoomService.newRound(newRoundDTO);
     }
 }

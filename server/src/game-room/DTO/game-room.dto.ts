@@ -19,6 +19,7 @@ export class JoinGameDTO {
     @IsNotEmpty()
     gameId: string;
 }
+
 export type Answers = {
     categoryId: string,
     answer: string
@@ -39,4 +40,18 @@ export class EndGameDTO {
 
     @IsArray()
     answers: Answers[];
+}
+
+export class NewRoundDTO {
+    @IsString()
+    @IsNotEmpty()
+    playerId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    opponentId: string;
+
+    @IsString()
+    @IsNotEmpty()
+    gameId: string;
 }

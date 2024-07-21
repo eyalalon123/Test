@@ -15,7 +15,6 @@ export const InvitationPopup: React.FC<InvitationPopupProps> = ({ setPopUp, game
     const { user } = useUser();
 
     const handleStartGame = () => {
-
         if (!user || !gameId) return;
         setPopUp(false);
         try {
