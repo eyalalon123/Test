@@ -164,6 +164,21 @@ input:focus {
     }
 }
 
+.send-button-single {
+    width: 20vw;
+    height: 5vh;
+    background-color: #000000;
+    border: none;
+    border-radius: 4px;
+    font-size: 1rem;
+    color: #ffffff;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 15%;
+    animation: fadeIn 2s ease-in-out;
+    align-self: center;
+}
+
 @keyframes fadeIn {
     from {
         opacity: 0;

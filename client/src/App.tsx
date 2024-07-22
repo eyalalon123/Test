@@ -8,6 +8,7 @@ import {
 } from "react-router-dom";
 
 import ContextManager from "./common/ContextManager";
+
 import RegisterPage from "./pages/Register/RegisterPage";
 import LobbyPage from "./pages/MultiPlayer/LobbyPage";
 import SinglePlayer from "./pages/Game/SinglePlayer";
