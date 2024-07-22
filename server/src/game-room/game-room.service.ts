@@ -134,6 +134,10 @@ export class GameRoomService {
             const user1 = await this.authService.getUserById(playerId);
             const createdName = user1.user.name
 
+            await this.gameRoomModel.findByIdAndUpdate(gameId, {
+                $push: { results: {} },
+            });
+
             // send invitation to the opponent
             this.gameGateway.sendInvitation(opponentId.toString(), gameId, createdName)
         }

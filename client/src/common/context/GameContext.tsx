@@ -9,6 +9,7 @@ interface GameIdContext {
     opponentId: string | undefined;
     isNewRound: boolean;
     showEndGamePopup: boolean;
+    setShowEndGamePopup: React.Dispatch<React.SetStateAction<boolean>>;
     timeLeft: number;
     startGame: (randomLetter: string, gameId: string, opponentId: string) => void;
     scoreP1: number;
@@ -21,6 +22,8 @@ interface GameIdContext {
     setInputs: React.Dispatch<React.SetStateAction<any[]>>;
     pointResults: number;
     setPointResults: React.Dispatch<React.SetStateAction<number>>;
+    showResultsAfterGame: boolean;
+    setShowResultsAfterGame: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export enum GameStatusEnum {
@@ -55,6 +58,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     const [createdName, setCreatedName] = useState<string>('');
     const [inputs, setInputs] = useState(Array(9).fill(''));
     const [pointResults, setPointResults] = useState<number>(0);
+    const [showResultsAfterGame, setShowResultsAfterGame] = useState(false);
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -68,6 +72,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
 
         const handleStartGame = ({ randomLetter, gameId, opponentId }: any) => {
             navigate('/multi-player');
+            setShowResultsAfterGame(false)
             startGame(randomLetter, gameId, opponentId);
         };
 
@@ -75,6 +80,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
             if (inviteGameId === gameId) {
                 setOpponentName(createdName)
                 setIsNewRound(true);
+                setShowEndGamePopup(true);
             } else {
                 setOpponentName(createdName)
                 setGameId(inviteGameId);
@@ -135,7 +141,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     }, [intervalId]);
 
     return (
-        <GameContext.Provider value={{ pointResults, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
+        <GameContext.Provider value={{ pointResults, setShowResultsAfterGame, showResultsAfterGame, setShowEndGamePopup, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
             {children}
         </GameContext.Provider>
     );

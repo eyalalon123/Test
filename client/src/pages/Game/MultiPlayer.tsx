@@ -23,7 +23,7 @@ const MultiPlayer: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, results, setResults, inputs, setInputs, setPointResults } = useGame()
+    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, results, showResultsAfterGame, setShowResultsAfterGame, setShowEndGamePopup, setResults, inputs, setInputs, setPointResults } = useGame()
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -117,13 +117,18 @@ const MultiPlayer: React.FC = () => {
         navigate('/home')
     }
 
+    const showResults = () => {
+        setShowEndGamePopup(false)
+        setShowResultsAfterGame(true)
+    }
+
     if (!chosenLetter) handleUserGoBackHome();
     if (!user) return <div>Loading...</div>;
 
     return (
         <>
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
-            {showEndGamePopup && <EndGamePopUp handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} />}
+            {showEndGamePopup && <EndGamePopUp showResults={showResults} handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} />}
             <div className="game-page">
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container'>
@@ -144,7 +149,10 @@ const MultiPlayer: React.FC = () => {
                         </div>
                     ))}
                 </div>
-                <button className='send-button' onClick={handleFinishGame}>שליחה</button>
+                <div className={showResultsAfterGame ? 'icon-container' : 'display-none'}>
+                    {showResultsAfterGame && <img onClick={handleInviteNewGame} className='invite-player-icon' src='src/images/invite_player_Icon.png' alt='' />}
+                    <button className={showResultsAfterGame ? 'remove-button' : 'send-button'} onClick={handleFinishGame}>שליחה</button>
+                </div>
             </div>
         </>
     );

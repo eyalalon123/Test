@@ -122,23 +122,46 @@ input:focus {
     text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
 }
 
-.send-button {
-    width: 20vw;
-    height: 5vh;
-    background-color: #000000;
-    border: none;
-    border-radius: 4px;
-    font-size: 1rem;
-    color: #ffffff;
-    cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
-    margin-top: 15%;
-    animation: fadeIn 2s ease-in-out;
+.icon-container {
+    display: flex;
+    justify-content: center;
+    width: 100vw;
+    height: 7vh;
+    margin-top: 13%;
+
+    .remove-button {
+        display: none;
+    }
+
+    .invite-player-icon {
+        width: 20vw;
+    }
 }
 
-.send-button:hover {
-    background-color: #424242;
-    transform: scale(1.1);
+.display-none {
+    display: flex;
+    flex-direction: column;
+    height: fit-content;
+
+    .send-button {
+        width: 20vw;
+        height: 5vh;
+        background-color: #000000;
+        border: none;
+        border-radius: 4px;
+        font-size: 1rem;
+        color: #ffffff;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+        margin-top: 15%;
+        animation: fadeIn 2s ease-in-out;
+        align-self: center;
+
+        .send-button:hover {
+            background-color: #424242;
+            transform: scale(1.1);
+        }
+    }
 }
 
 @keyframes fadeIn {
