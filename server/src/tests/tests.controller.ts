@@ -9,6 +9,7 @@ export class testsController {
     constructor(private testsService: testsService) { }
 
     @Post()
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     createTest(@Body() testsDTO: testsDTO) {
         return this.testsService.createTest(testsDTO);
@@ -21,6 +22,7 @@ export class testsController {
     }
 
     @Get(':id')
+    @UseGuards(AuthGuard)
     async getTestById(@Param('id') id: string) {
         const findTest = await this.testsService.getTestById(id)
         if (!findTest) { throw new HttpException('user not found', 404) };
@@ -28,12 +30,14 @@ export class testsController {
     }
 
     @Patch(':id')
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     updateTest(@Param('id') id: string, @Body() updateTestsDTO: updateTestsDTO) {
         return this.testsService.updateTest(id, updateTestsDTO)
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     deleteTest(@Param('id') id: string) {
         return this.testsService.deleteTest(id)
     }

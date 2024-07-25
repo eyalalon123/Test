@@ -9,12 +9,14 @@ export class UsersController {
     constructor(private userService: UsersService) { }
 
     @Post()
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     creatUser(@Body() user: userDTO) {
         return this.userService.createUser(user);
     }
 
     @Get()
+    @UseGuards(AuthGuard)
     getAllUsers() {
         return this.userService.getAllUsers()
     }
@@ -28,12 +30,14 @@ export class UsersController {
     }
 
     @Patch(':id')
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     updateUser(@Param('id') id: string, @Body() updateUserDTO: updateUserDTO) {
         return this.userService.updateUser(id, updateUserDTO)
     }
 
     @Delete(':id')
+    @UseGuards(AuthGuard)
     deleteUser(@Param('id') id: string) {
         return this.userService.deleteUser(id)
     }

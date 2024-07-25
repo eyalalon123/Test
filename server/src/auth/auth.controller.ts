@@ -27,6 +27,7 @@ export class AuthController {
     }
 
     @Get(':username')
+    @UseGuards(AuthGuard)
     async getUserByName(@Param('username') name: string) {
         return await this.authService.getUserIdByName(name)
     }

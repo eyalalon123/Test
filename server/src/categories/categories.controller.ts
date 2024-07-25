@@ -8,12 +8,14 @@ export class CategoriesController {
     constructor(private readonly categoriesService: CategoriesService) { }
 
     @Post()
+    @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
     createGame(@Body() game: CreateGameDTO) {
         return this.categoriesService.createGame(game);
     }
 
     @Get()
+    @UseGuards(AuthGuard)
     getAllUsers() {
         return this.categoriesService.getAllData()
     }
