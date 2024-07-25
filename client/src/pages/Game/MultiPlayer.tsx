@@ -131,7 +131,7 @@ const MultiPlayer: React.FC = () => {
             {showEndGamePopup && <EndGamePopUp showResults={showResults} handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} />}
             <div className="game-page">
                 <div className="timer">זמן:{timeLeft}</div>
-                <div className='random-letter-container'>
+                <div className='random-letter-container-multiplayer'>
                     <p className='chosen-letter'>{chosenLetter}</p>
                 </div>
                 <div className="inputs">
@@ -148,10 +148,10 @@ const MultiPlayer: React.FC = () => {
                             />
                         </div>
                     ))}
-                </div>
-                <div className={showResultsAfterGame ? 'icon-container' : 'display-none'}>
-                    {showResultsAfterGame && <img onClick={handleInviteNewGame} className='invite-player-icon' src='src/images/invite_player_Icon.png' alt='' />}
-                    <button className={showResultsAfterGame ? 'remove-button' : 'send-button'} onClick={handleFinishGame}>שליחה</button>
+                    <div className={showResultsAfterGame ? 'icon-container' : 'display-none'}>
+                        {showResultsAfterGame && <img onClick={handleInviteNewGame} className='invite-player-icon' src='src/images/invite_player_Icon.png' alt='' />}
+                        <button className={showResultsAfterGame ? 'remove-button' : 'send-button'} onClick={handleFinishGame}>שליחה</button>
+                    </div>
                 </div>
             </div>
         </>

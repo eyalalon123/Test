@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import axios from 'axios';
 
+import EmptyErrorPopup from '../GenericPopup/EmptyErrorPopup';
 import { useUser } from '../../common/context/UserContext';
 
 import './lobbyPage.scss';
-import EmptyErrorPopup from '../GenericPopup/EmptyErrorPopup';
 
 const LobbyPage = () => {
     const { user } = useUser();

@@ -7,11 +7,12 @@ export default defineConfig({
   server: {
     open: true,
     port: 5000,
-    proxy:{
-      '/api':{
+    host: true,
+    proxy: {
+      '/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-        secure:false,
+        secure: false,
       }
     }
   }

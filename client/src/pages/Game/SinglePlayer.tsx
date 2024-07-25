@@ -128,8 +128,8 @@ const SinglePlayer: React.FC = () => {
                             />
                         </div>
                     ))}
+                    <button className='send-button-single' onClick={finishGame}>שליחה</button>
                 </div>
-                <button className='send-button-single' onClick={finishGame}>שליחה</button>
             </div>
         </>
     );
