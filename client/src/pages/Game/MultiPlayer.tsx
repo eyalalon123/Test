@@ -12,6 +12,8 @@ import EndGamePopUp from '../GenericPopup/EndGamePopup';
 
 import { CATEGORIES } from './game.consts';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import "./game.scss";
 
 type ResultsData = {
@@ -130,6 +132,9 @@ const MultiPlayer: React.FC = () => {
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
             {showEndGamePopup && <EndGamePopUp showResults={showResults} handleUserGoBackHome={handleUserGoBackHome} handleStartNewGame={handleStartNewGame} handleInviteNewGame={handleInviteNewGame} />}
             <div className="game-page">
+                <div className='arrow-back-container'>
+                    <ArrowBackIcon className='arrow-back-icon' onClick={() => navigate(-1)} />
+                </div>
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container-multiplayer'>
                     <p className='chosen-letter'>{chosenLetter}</p>

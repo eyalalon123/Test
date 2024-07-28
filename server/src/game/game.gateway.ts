@@ -25,11 +25,8 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
 
     handleDisconnect(client: Socket) {
         this.logger.log(`Client disconnected: ${client.id}`);
-        // const gameId = this.clientGameMap.get(client.id);
-        // if (gameId) {
-        //   this.removePlayerFromGame(client.id, gameId);
-        //   this.sendSocket(gameId, 'playerDisconnected', client.id);
-        // }
+
+        this.server.emit('userDisconnected', { clientId: client.id });
     }
 
     @SubscribeMessage('joinRoom')

@@ -10,6 +10,16 @@
     font-family: 'Rubik', sans-serif;
     color: #424242;
     animation: fadeIn 2s ease-in-out;
+
+    .arrow-back-container {
+        height: 0%;
+        width: 100%;
+    }
+
+    .arrow-back-icon {
+        margin: 3% 0 0 4%;
+        cursor: pointer;
+    }
 }
 
 .timer {
@@ -209,6 +219,11 @@ input:focus {
         font-family: 'Rubik', sans-serif;
         color: #424242;
         animation: fadeIn 2s ease-in-out;
+
+        .arrow-back-container {
+            height: 0%;
+            width: 100%;
+        }
     }
 
     .timer {
@@ -318,6 +333,9 @@ input:focus {
     }
 
     .chosen-letter {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
         font-size: 2rem;
         text-align: center;
         font-weight: 700;

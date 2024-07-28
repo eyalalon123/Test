@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useMutation, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
@@ -8,6 +9,8 @@ import { useUser } from '../../common/context/UserContext';
 import { CATEGORIES, HEBREW_LETTERS } from './game.consts';
 import ErrorPopup from '../GenericPopup/ErrorPopup';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import "./game.scss";
 
 type CategoryData = {
@@ -16,6 +19,7 @@ type CategoryData = {
 
 const SinglePlayer: React.FC = () => {
     const { user } = useUser();
+    const navigate = useNavigate()
 
     const [timeLeft, setTimeLeft] = useState(60);
     const [chosenLetter, setChosenLetter] = useState('');
@@ -109,6 +113,9 @@ const SinglePlayer: React.FC = () => {
         <>
             {showErrorPopup && <ErrorPopup setErrorPopUp={setShowErrorPopup} />}
             <div className="game-page">
+                <div className='arrow-back-container'>
+                    <ArrowBackIcon className='arrow-back-icon' onClick={() => navigate(-1)} />
+                </div>
                 <div className="timer">זמן:{timeLeft}</div>
                 <div className='random-letter-container'>
                     <button className='random-letter-button' onClick={addRandomLetter}>בחירת אות אקראית</button>

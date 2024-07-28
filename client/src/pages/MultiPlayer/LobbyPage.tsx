@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 
 import axios from 'axios';
@@ -5,10 +6,13 @@ import axios from 'axios';
 import EmptyErrorPopup from '../GenericPopup/EmptyErrorPopup';
 import { useUser } from '../../common/context/UserContext';
 
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
 import './lobbyPage.scss';
 
 const LobbyPage = () => {
     const { user } = useUser();
+    const navigate = useNavigate()
 
     const [emptyErrorPopup, setEmptyErrorPopup] = useState<boolean>(false)
     const [rivalUsername, setRivalUsername] = useState('');
@@ -34,6 +38,9 @@ const LobbyPage = () => {
         <>
             {emptyErrorPopup && <EmptyErrorPopup setEmptyErrorPopUp={setEmptyErrorPopup} />}
             <div className="online-game">
+                <div className='arrow-back-container'>
+                    <ArrowBackIcon className='arrow-back-icon' onClick={() => navigate(-1)} />
+                </div>
                 <div className="join-game">
                     <h4 className="create-game">צור משחק</h4>
                     <input

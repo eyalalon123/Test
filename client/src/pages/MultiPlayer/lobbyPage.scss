@@ -11,6 +11,16 @@
     font-family: 'Rubik', sans-serif;
     color: #424242;
     animation: fadeIn 2s ease-in-out;
+
+    .arrow-back-container {
+        height: 0%;
+        width: 100%;
+    }
+
+    .arrow-back-icon {
+        margin: 3% 0 0 4%;
+        cursor: pointer;
+    }
 }
 
 .join-game {
@@ -22,7 +32,8 @@
 }
 
 .create-game {
-    height: 20%;
+    height: 2%;
+    margin: 5% 0 30% 0;
     font-size: 2rem;
     font-weight: 700;
     color: #424242;
@@ -80,6 +91,16 @@
         font-family: 'Rubik', sans-serif;
         color: #424242;
         animation: fadeIn 2s ease-in-out;
+
+        .arrow-back-container {
+            height: 0%;
+            width: 100%;
+        }
+
+        .arrow-back-icon {
+            margin: 3% 0 0 4%;
+            cursor: pointer;
+        }
     }
 
     .join-game {
@@ -91,8 +112,9 @@
     }
 
     .create-game {
-        height: 20%;
+        height: 2%;
         font-size: 2rem;
+        margin: 5% 0 50% 0;
         font-weight: 700;
         color: #424242;
         animation: fadeIn 1s ease-in-out;
