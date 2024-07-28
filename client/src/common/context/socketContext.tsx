@@ -1,5 +1,4 @@
 import { createContext, useContext, useEffect, useMemo } from "react";
-
 import { io, Socket } from "socket.io-client";
 import { useUser } from "./UserContext";
 
@@ -10,44 +9,47 @@ export const useSocket = () => {
 }
 
 const SocketProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
-
     const { user } = useUser();
-    const socket = useMemo<Socket | null>(createSocketConnection, [user]);
+
+    const createSocketConnection = useMemo(() => {
+        if (!user) return null;
+
+        const isLocalhost = window.location.hostname === "localhost";
+        const domain = isLocalhost ? "http://localhost:8000" : "http://192.168.0.72:8000";
+
+        try {
+            const newSocket = io(domain, {
+                transports: ['websocket'],
+                withCredentials: true,
+            });
+
+            newSocket.on('connect', () => {
+                console.log("Socket created successfully");
+                joinRoom(newSocket);
+            });
+
+            newSocket.on('disconnect', () => {
+                console.log("Socket disconnected");
+            });
+
+            return newSocket;
+        } catch (err) {
+            console.log(err);
+            return null;
+        }
+    }, [user]);
 
     useEffect(() => {
         function handleUnload() {
-            socket?.disconnect()
+            createSocketConnection?.disconnect();
         }
 
         window.addEventListener("beforeunload", handleUnload);
 
         return () => {
-            window.removeEventListener("beforeunload", handleUnload)
+            window.removeEventListener("beforeunload", handleUnload);
         }
-    }, [])
-
-    function createSocketConnection() {
-        if (!user) return null;
-        try {
-            const domain = "http://localhost:8000";
-            const newSocket = io(domain);
-
-            newSocket.on('connect', () => {
-                console.log("Socket created successfully");
-                joinRoom(newSocket);
-            })
-
-            newSocket.on('disconnect', () => {
-                console.log("Socket disconnected");
-            })
-
-            return newSocket;
-        }
-        catch (err) {
-            console.log(err);
-            return null;
-        }
-    }
+    }, [createSocketConnection]);
 
     const joinRoom = (socket: Socket) => {
         if (!socket || !user) return;
@@ -55,12 +57,13 @@ const SocketProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) 
         console.log(`Joined into room-${user._id}`);
     }
 
-    if (!socket) return <span>Error</span>;
+    if (!createSocketConnection) return <span>Error</span>;
 
     return (
-        <SocketContext.Provider value={socket}>
+        <SocketContext.Provider value={createSocketConnection}>
             {children}
         </SocketContext.Provider>
-    )
+    );
 }
+
 export default SocketProvider;

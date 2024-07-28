@@ -26,6 +26,7 @@ const HomePage = () => {
     });
 
     if (!user) return <div>Loading...</div>;
+
     return (
         <>
             <div className="home-page">
@@ -38,7 +39,9 @@ const HomePage = () => {
                 </div>
             </div>
             {popupJoinRoom &&
-                <InvitationPopup gameId={gameId} setPopUp={setPopupJoinRoom} />}
+                <InvitationPopup gameId={gameId} setPopUp={setPopupJoinRoom} />
+            }
+
         </>
     );
 };
