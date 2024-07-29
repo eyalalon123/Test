@@ -1,4 +1,4 @@
-import { IsArray, IsNotEmpty, IsString } from 'class-validator';
+import { IsArray, IsNotEmpty, IsString, IsDateString } from 'class-validator';
 
 export class CreateGameDTO {
     @IsString()
@@ -54,4 +54,22 @@ export class NewRoundDTO {
     @IsString()
     @IsNotEmpty()
     gameId: string;
+}
+
+export class MessageDTO {
+    @IsString()
+    @IsNotEmpty()
+    gameId: string;
+
+    @IsString()
+    senderId: string;
+
+    @IsString()
+    receiverId: string;
+
+    @IsString()
+    text: string;
+
+    @IsDateString()
+    date: string;
 }

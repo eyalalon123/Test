@@ -22,20 +22,56 @@
 
 .message-you,
 .message-opponent {
-    height: 15%;
-    padding: 8px;
+    width: 100%;
     border-radius: 8px;
     word-wrap: break-word;
+    display: flex;
+    flex-direction: row;
+    direction: rtl;
 }
 
 .message-you {
     background-color: #00bcd4;
     color: white;
+
+    .p-title {
+        padding-top: 15px;
+        width: 15%;
+    }
+
+    .p-content {
+        width: 60%;
+        padding-top: 15px;
+    }
+
+    .p-date {
+        width: 30%;
+        text-align: center;
+        padding: 10px;
+    }
 }
 
 .message-opponent {
     background-color: #e0e0e0;
     color: black;
+
+    .p-title {
+        padding-top: 15px;
+        padding-left: 2%;
+        width: 40%;
+    }
+
+    .p-content {
+        width: 30%;
+        margin-left: 15%;
+        padding-top: 15px;
+    }
+
+    .p-date {
+        width: 30%;
+        text-align: center;
+        padding: 10px;
+    }
 }
 
 .chatbox-input {

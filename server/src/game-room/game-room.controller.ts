@@ -1,6 +1,6 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
 import { GameRoomService } from './game-room.service';
-import { CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
+import { CreateGameDTO, EndGameDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('api/game-room')
@@ -29,5 +29,17 @@ export class GameRoomController {
     @UseGuards(AuthGuard)
     newRound(@Body() newRoundDTO: NewRoundDTO) {
         return this.gameRoomService.newRound(newRoundDTO);
+    }
+
+    @Post('/new-message')
+    @UseGuards(AuthGuard)
+    newMessage(@Body() message: MessageDTO) {
+        return this.gameRoomService.sendMessage(message);
+    }
+
+    @Get('/get-chat/:gameId')
+    @UseGuards(AuthGuard)
+    getChat(@Param('gameId') gameId: string) {
+        return this.gameRoomService.getChat(gameId);
     }
 }

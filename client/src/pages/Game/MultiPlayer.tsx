@@ -131,6 +131,7 @@ const MultiPlayer: React.FC = () => {
     }
 
     if (!chosenLetter) handleUserGoBackHome();
+
     if (!user) return <div>Loading...</div>;
 
     return (

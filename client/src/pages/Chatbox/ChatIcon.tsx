@@ -1,13 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-import { useGame } from '../../common/context/GameContext';
-
 import ChatBox from './Chatbox';
 
 import './chatIcon.scss';
 
 const ChatIcon: React.FC = () => {
-    const { gameId } = useGame();
     const [isChatOpen, setChatOpen] = useState(false);
     const popupRef = useRef<HTMLDivElement | null>(null);
 
@@ -41,7 +38,7 @@ const ChatIcon: React.FC = () => {
                     <div className="chat-overlay" />
                     <div className="chat-popup" ref={popupRef}>
                         <span className='close-chat-span' onClick={() => setChatOpen(false)}>×</span>
-                        <ChatBox roomId={`room-${gameId}`} />
+                        <ChatBox />
                     </div>
                 </>
             }

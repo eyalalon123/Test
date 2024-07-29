@@ -7,8 +7,8 @@ import { CategoriesService } from 'src/categories/categories.service';
 import { AuthService } from 'src/auth/auth.service';
 import { GameGateway } from 'src/game/game.gateway';
 
-import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, NewRoundDTO } from './DTO/game-room.dto';
-import { GameRoom, GameStatusEnum, Result } from './schemas/game-room.schema';
+import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
+import { GameRoom, GameStatusEnum, Message, Result } from './schemas/game-room.schema';
 
 @Injectable()
 export class GameRoomService {
@@ -145,5 +145,35 @@ export class GameRoomService {
             console.log('Error trying to create game: ', err);
             throw err;
         }
+    }
+
+    async sendMessage(sendMessageDTO: MessageDTO) {
+        const { gameId, senderId, receiverId, text, date: dateString } = sendMessageDTO;
+        const date = new Date(dateString)
+
+        // Create a new message object
+        const message = {
+            senderId,
+            text,
+            timestamp: date
+        } as Message;
+
+        // Add the message to the game's chat array
+        await this.gameRoomModel.findByIdAndUpdate(gameId, {
+            $push: { chat: message }
+        });
+
+        // Notify both players about the new message
+        this.gameGateway.handleChatMessage(text, receiverId, gameId, date);
+
+        return message;
+    }
+
+    async getChat(gameId: string) {
+        // Retrieve messages from the game's chat array
+        const gameRoom = await this.gameRoomModel.findById(gameId).select('chat');
+
+        if (!gameRoom) throw new BadRequestException('Game room not found');
+        return gameRoom.chat;
     }
 }

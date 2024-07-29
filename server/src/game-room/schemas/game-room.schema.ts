@@ -13,6 +13,17 @@ export class Result {
     resultsP2?: number
 }
 
+export class Message {
+    @Prop({ type: mongoose.Schema.Types.ObjectId })
+    senderId: string;
+
+    @Prop({ type: String })
+    text: string;
+
+    @Prop({ type: Date, default: undefined })
+    timestamp: Date;
+}
+
 @Schema({ versionKey: false })
 export class GameRoom {
 
@@ -30,5 +41,8 @@ export class GameRoom {
 
     @Prop({ type: [Result] })
     results: Result[];
+
+    @Prop({ type: [Message] })
+    chat: Message[];
 }
 export const GameRoomSchema = SchemaFactory.createForClass(GameRoom);

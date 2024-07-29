@@ -1,6 +1,7 @@
 import { SubscribeMessage, WebSocketGateway, OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect, WebSocketServer, } from '@nestjs/websockets';
 import { Logger } from '@nestjs/common';
 import { Socket, Server } from 'socket.io';
+import { Message } from 'src/game-room/schemas/game-room.schema';
 
 @WebSocketGateway({
     cors: {
@@ -41,10 +42,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         this.server.to(room).emit('message', `${client} has left the room ${room}`);
     }
 
-    @SubscribeMessage('chatMessage')
-    handleChatMessage(client: Socket, { room, message }: { room: string, message: string }) {
-        this.logger.log(`Chat message from ${client.id} in room ${room}: ${message}`);
-        this.server.to(room).emit('chatMessage', { userId: client.id, message });
+    async handleChatMessage(content: string, receiverId: string, gameId: string, date: Date) {
+        this.logger.log(`new message send to ${receiverId}: ${content}`);
+
+        this.sendSocket(receiverId, "new-message", { gameId, content, date });
     }
 
     sendSocket(playerId: string, event: string, payload: Record<string, any> | string) {
