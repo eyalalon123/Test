@@ -24,6 +24,9 @@ interface GameIdContext {
     setPointResults: React.Dispatch<React.SetStateAction<number>>;
     showResultsAfterGame: boolean;
     setShowResultsAfterGame: React.Dispatch<React.SetStateAction<boolean>>;
+    hasSubmitted: boolean;
+    setHasSubmitted: React.Dispatch<React.SetStateAction<boolean>>;
+    intervalId: NodeJS.Timeout | undefined;
 }
 
 export enum GameStatusEnum {
@@ -43,21 +46,23 @@ export const useGame = () => {
 const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const socket = useSocket();
     const navigate = useNavigate();
-    const [gameId, setGameId] = useState<string>();
-    const [chosenLetter, setChosenLetter] = useState<string>();
-    const [gameStatus, setGameStatus] = useState<GameStatusEnum>();
-    const [opponentId, setOpponentId] = useState<string>();
-    const [isNewRound, setIsNewRound] = useState<boolean>(false);
-    const [showEndGamePopup, setShowEndGamePopup] = useState(false);
-    const [timeLeft, setTimeLeft] = useState(60);
-    const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+
     const [scoreP1, setScoreP1] = useState(0);
     const [scoreP2, setScoreP2] = useState(0);
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [gameId, setGameId] = useState<string>();
     const [results, setResults] = useState<boolean[]>([]);
-    const [opponentName, setOpponentName] = useState<string>('');
-    const [createdName, setCreatedName] = useState<string>('');
+    const [opponentId, setOpponentId] = useState<string>();
+    const [hasSubmitted, setHasSubmitted] = useState(false);
     const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [chosenLetter, setChosenLetter] = useState<string>();
+    const [createdName, setCreatedName] = useState<string>('');
     const [pointResults, setPointResults] = useState<number>(0);
+    const [opponentName, setOpponentName] = useState<string>('');
+    const [isNewRound, setIsNewRound] = useState<boolean>(false);
+    const [gameStatus, setGameStatus] = useState<GameStatusEnum>();
+    const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
+    const [showEndGamePopup, setShowEndGamePopup] = useState(false);
     const [showResultsAfterGame, setShowResultsAfterGame] = useState(false);
 
     useEffect(() => {
@@ -120,6 +125,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         setScoreP2(0)
         setPointResults(0)
         setIsNewRound(false);
+        setHasSubmitted(false)
     };
 
     const startTimer = () => {
@@ -141,7 +147,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     }, [intervalId]);
 
     return (
-        <GameContext.Provider value={{ pointResults, setShowResultsAfterGame, showResultsAfterGame, setShowEndGamePopup, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
+        <GameContext.Provider value={{ intervalId, hasSubmitted, setHasSubmitted, pointResults, setShowResultsAfterGame, showResultsAfterGame, setShowEndGamePopup, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
             {children}
         </GameContext.Provider>
     );

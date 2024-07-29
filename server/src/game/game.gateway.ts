@@ -4,7 +4,7 @@ import { Socket, Server } from 'socket.io';
 
 @WebSocketGateway({
     cors: {
-        origin: ['http://localhost:5000', 'http://192.168.0.72:5000'],
+        origin: ['http://localhost:5000', /^http:\/\/192\.168\.0\.\d+:5000$/],
         credentials: true,
     },
 })
@@ -39,6 +39,12 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
     handleLeaveRoom(client: Socket, room: string) {
         client.leave(room);
         this.server.to(room).emit('message', `${client} has left the room ${room}`);
+    }
+
+    @SubscribeMessage('chatMessage')
+    handleChatMessage(client: Socket, { room, message }: { room: string, message: string }) {
+        this.logger.log(`Chat message from ${client.id} in room ${room}: ${message}`);
+        this.server.to(room).emit('chatMessage', { userId: client.id, message });
     }
 
     sendSocket(playerId: string, event: string, payload: Record<string, any> | string) {

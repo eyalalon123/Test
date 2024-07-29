@@ -27,6 +27,7 @@ const SinglePlayer: React.FC = () => {
     const [showErrorPopup, setShowErrorPopup] = useState(false);
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>()
     const [playerAnswers, setPlayerAnswers] = useState(Array(9).fill(''));
+    const [hasSubmitted, setHasSubmitted] = useState(false);
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -42,6 +43,7 @@ const SinglePlayer: React.FC = () => {
         startTimer();
         setResults([])
         setPlayerAnswers(Array(9).fill(''))
+        setHasSubmitted(false);
     };
 
     const startTimer = () => {
@@ -77,6 +79,7 @@ const SinglePlayer: React.FC = () => {
         mutationFn: async ({ answers, letter }) => {
             try {
                 if (!ids) throw new Error('Category IDs not available');
+                if (hasSubmitted) throw new Error('Answers already submitted for this letter');
 
                 const payload = ids.map((id, index) => ({
                     categoryId: id,
@@ -84,6 +87,7 @@ const SinglePlayer: React.FC = () => {
                 }));
 
                 const response = await axios.post('/api/games/submit', { answers: payload, letter });
+                setHasSubmitted(true);
 
                 return response.data;
             } catch (error) {

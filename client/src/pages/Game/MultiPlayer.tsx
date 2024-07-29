@@ -7,6 +7,8 @@ import axios from 'axios';
 import { useUser } from '../../common/context/UserContext';
 import { useGame } from '../../common/context/GameContext';
 
+import ChatIcon from '../Chatbox/ChatIcon';
+
 import ErrorPopup from '../GenericPopup/ErrorPopup';
 import EndGamePopUp from '../GenericPopup/EndGamePopup';
 
@@ -25,7 +27,7 @@ const MultiPlayer: React.FC = () => {
     const { user } = useUser();
     const navigate = useNavigate();
     const [showErrorPopup, setShowErrorPopup] = useState(false);
-    const { gameId, chosenLetter, opponentId, timeLeft, showEndGamePopup, results, showResultsAfterGame, setShowResultsAfterGame, setShowEndGamePopup, setResults, inputs, setInputs, setPointResults } = useGame()
+    const { gameId, chosenLetter, opponentId, timeLeft, intervalId, hasSubmitted, setHasSubmitted, showEndGamePopup, results, showResultsAfterGame, setShowResultsAfterGame, setShowEndGamePopup, setResults, inputs, setInputs, setPointResults } = useGame()
 
     useEffect(() => {
         if (timeLeft === 0) {
@@ -56,6 +58,7 @@ const MultiPlayer: React.FC = () => {
         mutationFn: async ({ answers, letter }) => {
             try {
                 if (!ids) throw new Error('Category IDs not available');
+                if (hasSubmitted) throw new Error('Answers already submitted for this letter');
 
                 const payload = ids.map((id, index) => ({
                     categoryId: id,
@@ -68,6 +71,8 @@ const MultiPlayer: React.FC = () => {
                     playerId: user?._id,
                     gameId: gameId,
                 });
+                setHasSubmitted(true);
+
                 return data;
             } catch (error) {
                 throw new Error('Failed to submit answers');
@@ -88,6 +93,7 @@ const MultiPlayer: React.FC = () => {
             return
         };
         submitAnswers({ answers: inputs, letter: chosenLetter });
+        if (intervalId) clearInterval(intervalId);
     };
 
     const handleInviteNewGame = async () => {
@@ -158,6 +164,7 @@ const MultiPlayer: React.FC = () => {
                         <button className={showResultsAfterGame ? 'remove-button' : 'send-button'} onClick={handleFinishGame}>שליחה</button>
                     </div>
                 </div>
+                <ChatIcon />
             </div>
         </>
     );
