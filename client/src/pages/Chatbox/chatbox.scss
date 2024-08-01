@@ -23,6 +23,7 @@
 .message-you,
 .message-opponent {
     width: 100%;
+    max-height: fit-content;
     border-radius: 8px;
     word-wrap: break-word;
     display: flex;

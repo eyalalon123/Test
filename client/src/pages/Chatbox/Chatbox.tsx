@@ -57,6 +57,7 @@ const ChatBox = () => {
             </div>
             <div className="chatbox-input">
                 <input
+                    maxLength={70}
                     type="text"
                     value={message || ""}
                     onChange={(e) => setMessage(e.target.value)}
