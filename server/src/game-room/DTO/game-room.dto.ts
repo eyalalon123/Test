@@ -73,3 +73,9 @@ export class MessageDTO {
     @IsDateString()
     date: string;
 }
+
+export class GetUserGamesResultsDTO {
+    @IsString()
+    @IsNotEmpty()
+    playerId: string;
+}

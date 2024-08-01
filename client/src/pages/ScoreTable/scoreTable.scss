@@ -1,0 +1,180 @@
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@400;500;700&display=swap');
+
+.score-table-container {
+    width: 100%;
+    height: 100%;
+    background-color: #f2ebeb;
+    font-family: 'Rubik', sans-serif;
+    animation: fadeIn 2s ease-in-out;
+    direction: rtl;
+
+    .arrow-back-container {
+        height: 0%;
+        width: 100%;
+        direction: ltr;
+
+        .arrow-back-icon {
+            margin: 2% 0 0 1%;
+            cursor: pointer;
+        }
+    }
+
+
+    .score-table-list::-webkit-scrollbar {
+        display: none;
+    }
+
+    .score-table-list {
+        background-color: #f9f9f9;
+        width: 90%;
+        margin-right: 5%;
+        list-style: none;
+        overflow-y: scroll;
+
+
+        .score-table-title {
+            height: 5vh;
+            width: 100%;
+            font-size: 24px;
+            text-align: center;
+            font-weight: 700;
+            margin: 2% 0 5% 0;
+        }
+
+        .score-table-item-win {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+
+        .score-table-item-draw {
+            background-color: #fff3cd;
+            border-color: #ffeeba;
+        }
+
+        .score-table-item-lose {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+
+
+        .score-table-item-win,
+        .score-table-item-draw,
+        .score-table-item-lose {
+            height: 20vh;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 10px 15px;
+            font-size: 14px;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+            animation: slideIn 1s ease-out;
+            margin-top: 1%;
+
+            .game-result {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .win,
+                .lose,
+                .draw {
+                    font-weight: bold;
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 500px) {
+    .score-table-container {
+        width: 100%;
+        background-color: #f2ebeb;
+        font-family: 'Rubik', sans-serif;
+        animation: fadeIn 2s ease-in-out;
+        direction: rtl;
+
+        .arrow-back-container {
+            .arrow-back-icon {
+                margin: 5% 0 0 2%;
+            }
+        }
+
+        .score-table-list {
+            background-color: #f9f9f9;
+            width: 80%;
+            margin-right: 10%;
+            list-style: none;
+            overflow-y: scroll;
+
+            .score-table-title {
+                height: 5vh;
+                width: 100%;
+                font-size: 24px;
+                text-align: center;
+                font-weight: 700;
+                margin: 5% 0 5% 0;
+            }
+
+            .score-table-item-win {
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+            }
+
+            .score-table-item-draw {
+                background-color: #fff3cd;
+                border-color: #ffeeba;
+            }
+
+            .score-table-item-lose {
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+            }
+
+
+            .score-table-item-win,
+            .score-table-item-draw,
+            .score-table-item-lose {
+                height: 20vh;
+                border: 1px solid #ddd;
+                border-radius: 10px;
+                padding: 10px 15px;
+                font-size: 14px;
+                transition: background-color 0.3s ease, transform 0.3s ease;
+                animation: slideIn 1s ease-out;
+
+                .game-result {
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+
+                    .win,
+                    .lose,
+                    .draw {
+                        font-family: Arial, Helvetica, sans-serif;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(20px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

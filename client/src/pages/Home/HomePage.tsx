@@ -34,7 +34,7 @@ const HomePage = () => {
                     <h2>Welcome to the Home Page {user.name}</h2>
                     <button className='start-game-button' onClick={handleGame}>התחל משחק יחיד</button>
                     <button className='start-game-button' onClick={() => navigate('/lobby')}>שחק עם חבר</button>
-                    <button className='start-game-button' onClick={() => console.log("gg")}>טבלת ניקוד</button>
+                    <button className='start-game-button' onClick={() => navigate('/score-table')}>טבלת ניקוד</button>
                     <button className='start-game-button' onClick={logout}>התנתק</button>
                 </div>
             </div>

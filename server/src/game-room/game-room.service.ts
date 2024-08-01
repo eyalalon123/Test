@@ -7,7 +7,7 @@ import { CategoriesService } from 'src/categories/categories.service';
 import { AuthService } from 'src/auth/auth.service';
 import { GameGateway } from 'src/game/game.gateway';
 
-import { Answers, CreateGameDTO, EndGameDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
+import { Answers, CreateGameDTO, EndGameDTO, GetUserGamesResultsDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { GameRoom, GameStatusEnum, Message, Result } from './schemas/game-room.schema';
 
 @Injectable()
@@ -176,4 +176,62 @@ export class GameRoomService {
         if (!gameRoom) throw new BadRequestException('Game room not found');
         return gameRoom.chat;
     }
+
+    async getUserGameResults(getUserGamesResultsDTO: GetUserGamesResultsDTO) {
+        const { playerId } = getUserGamesResultsDTO;
+
+        try {
+            const user1 = await this.authService.getUserById(playerId);
+            const userName = user1.user.name;
+
+            // Find all games where the user is either player 1 or player 2
+            const games = await this.gameRoomModel.find({
+                $or: [{ idP1: playerId }, { idP2: playerId }],
+            });
+
+            if (!games || games.length === 0) {
+                throw new BadRequestException('No games found for the user.');
+            }
+
+            // Process each game to determine the winner and opponent names
+            const gameResults = await Promise.all(games.map(async (game) => {
+                const { idP1, idP2, results } = game;
+                let player1Score = 0;
+                let player2Score = 0;
+
+                results.forEach(result => {
+                    if (result.resultsP1 !== undefined) {
+                        player1Score += result.resultsP1;
+                    }
+                    if (result.resultsP2 !== undefined) {
+                        player2Score += result.resultsP2;
+                    }
+                });
+
+                const winner = player1Score > player2Score ? idP1 : (player1Score < player2Score ? idP2 : 'draw');
+                const opponentId = playerId === idP1 ? idP2 : idP1;
+
+                // Fetch the opponent's name
+                const opponent = await this.authService.getUserById(opponentId);
+                const opponentName = opponent.user.name;
+
+                return {
+                    gameId: game._id,
+                    userName,
+                    opponentName,
+                    winner,
+                    scores: {
+                        [idP1]: player1Score,
+                        [idP2]: player2Score,
+                    }
+                };
+            }));
+
+            return gameResults;
+        } catch (error) {
+            console.error('Error retrieving user game results:', error);
+            throw error;
+        }
+    }
+
 }

@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/common';
 import { GameRoomService } from './game-room.service';
-import { CreateGameDTO, EndGameDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
+import { CreateGameDTO, EndGameDTO, GetUserGamesResultsDTO, JoinGameDTO, MessageDTO, NewRoundDTO } from './DTO/game-room.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 
 @Controller('api/game-room')
@@ -42,4 +42,13 @@ export class GameRoomController {
     getChat(@Param('gameId') gameId: string) {
         return this.gameRoomService.getChat(gameId);
     }
+
+    @Get('get-score-table')
+    async getUserGameResults(@Query('playerId') playerId: string) {
+        if (!playerId) {
+            throw new BadRequestException('Player ID is required');
+        }
+        return await this.gameRoomService.getUserGameResults({ playerId });
+    }
+
 }
