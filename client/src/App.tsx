@@ -27,9 +27,9 @@ export const router = createBrowserRouter(
       <Route path="/*" element={<Page_404 />} />,
       <Route path="/login" element={<Login />} />,
       <Route path="/register" element={<RegisterPage />} />,
-      <Route path="/score-table" element={<ScoreTable />} />,
 
       <Route element={<ContextManager />}>
+        <Route path="/score-table" element={<ScoreTable />} />,
         <Route path="/home" element={<HomePage />} />
         <Route path="/single-player" element={<SinglePlayer />} />
         <Route path="/multi-player" element={<MultiPlayer />} />

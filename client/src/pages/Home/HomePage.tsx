@@ -41,7 +41,6 @@ const HomePage = () => {
             {popupJoinRoom &&
                 <InvitationPopup gameId={gameId} setPopUp={setPopupJoinRoom} />
             }
-
         </>
     );
 };
