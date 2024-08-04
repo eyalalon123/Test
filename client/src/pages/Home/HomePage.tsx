@@ -36,6 +36,7 @@ const HomePage = () => {
                     <button className='start-game-button' onClick={() => navigate('/lobby')}>שחק עם חבר</button>
                     <button className='start-game-button' onClick={() => navigate('/score-table')}>טבלת ניקוד</button>
                     <button className='start-game-button' onClick={logout}>התנתק</button>
+                    <a href='/add-word' className='start-game-add-word'>מצאתם טעות או ברצונכם להוסיף מילה שלא קיימת? לחצו כאן</a>
                 </div>
             </div>
             {popupJoinRoom &&

@@ -47,6 +47,19 @@
         background-color: #424242;
         transform: scale(1.05);
     }
+
+    .start-game-add-word {
+        margin-top: 5%;
+        height: 10%;
+        display: block;
+        padding: 12px 20px;
+        text-decoration: none;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+
+        &:hover {
+            transform: scale(1.05);
+        }
+    }
 }
 
 @media screen and (max-width: 500px) {
@@ -88,7 +101,7 @@
             height: 15vh;
             font-size: 1rem;
             border-radius: 4px;
-            margin-top: 10%;
+            margin-top: 8%;
             cursor: pointer;
             transition: background-color 0.3s ease, transform 0.3s ease;
         }
@@ -96,6 +109,15 @@
         .start-game-button:hover {
             background-color: #424242;
             transform: scale(1.05);
+        }
+
+        .start-game-add-word {
+            height: 1%;
+            margin: 0;
+            display: block;
+            padding: 12px 20px;
+            text-decoration: none;
+            transition: background-color 0.3s ease, transform 0.3s ease;
         }
     }
 }

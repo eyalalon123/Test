@@ -14,6 +14,7 @@ import ScoreTable from "./pages/ScoreTable/ScoreTable";
 import LobbyPage from "./pages/MultiPlayer/LobbyPage";
 import SinglePlayer from "./pages/Game/SinglePlayer";
 import MultiPlayer from "./pages/Game/MultiPlayer";
+import AddWords from "./pages/Home/AddWords";
 import HomePage from "./pages/Home/HomePage";
 import Page_404 from "./pages/404-Page/404";
 import Login from "./pages/Login/Login"
@@ -29,6 +30,7 @@ export const router = createBrowserRouter(
       <Route path="/register" element={<RegisterPage />} />,
 
       <Route element={<ContextManager />}>
+        <Route path="/add-word" element={<AddWords />} />,
         <Route path="/score-table" element={<ScoreTable />} />,
         <Route path="/home" element={<HomePage />} />
         <Route path="/single-player" element={<SinglePlayer />} />

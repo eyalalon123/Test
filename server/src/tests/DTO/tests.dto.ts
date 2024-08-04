@@ -1,23 +1,18 @@
-import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { IsOptional, IsString } from "class-validator";
 
-export class testsDTO {
+export class FixWordDto {
+    @IsString()
+    mistakeWord: string;
 
     @IsString()
-    @IsOptional()
-    name?: string;
-
-    @IsNumber()
-    @IsOptional()
-    grade?: number;
-
+    correctedWord: string;
 }
 
-export class updateTestsDTO {
+export class AddNewWordDto {
+    @IsOptional()
+    @IsString()
+    _id: string;
 
     @IsString()
-    name?: string;
-
-    @IsNumber()
-    grade?: number;
-
+    newWord: string;
 }
