@@ -25,12 +25,4 @@ export class testsService {
     getWordById(id: string) {
         return this.testsModel.findById(id)
     }
-
-    // updateTest(id: string, updateTestsDTO: updateTestsDTO) {
-    //     return this.testsModel.findByIdAndUpdate(id, updateTestsDTO, { new: true })
-    // }
-
-    // deleteTest(id: string) {
-    //     return this.testsModel.findByIdAndDelete(id)
-    // }
 }
