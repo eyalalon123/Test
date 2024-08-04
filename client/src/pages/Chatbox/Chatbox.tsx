@@ -1,16 +1,19 @@
+import { useEffect, useRef, useState } from 'react';
+
 import axios from 'axios';
-import { useState } from 'react';
 
 import { useGame } from '../../common/context/GameContext';
 import { useUser } from '../../common/context/UserContext';
 
 import './chatbox.scss'
 
-const ChatBox = () => {
+const ChatBox: React.FC = () => {
     const { user } = useUser();
     const { chat, gameId, opponentId, addMessage } = useGame();
 
     const [message, setMessage] = useState<string>()
+
+    const messagesEndRef = useRef<HTMLDivElement | null>(null);
 
     const sendMessage = async () => {
         if (!user || !message) return;
@@ -18,8 +21,9 @@ const ChatBox = () => {
         const date = new Date();
 
         addMessage({
-            content: message,
             senderId: user?._id,
+            gameId,
+            content: message,
             date,
         })
 
@@ -38,6 +42,16 @@ const ChatBox = () => {
         }
     }
 
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom();
+    }, [chat]);
+
     return (
         <div className="chatbox-container">
             <div className="chatbox-messages">
@@ -54,6 +68,7 @@ const ChatBox = () => {
                         </div>
                     )
                 })}
+                <div ref={messagesEndRef} />
             </div>
             <div className="chatbox-input">
                 <input

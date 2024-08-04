@@ -164,7 +164,7 @@ export class GameRoomService {
         });
 
         // Notify both players about the new message
-        this.gameGateway.handleChatMessage(text, receiverId, gameId, date);
+        this.gameGateway.handleChatMessage(text, receiverId, gameId, date, senderId);
 
         return message;
     }

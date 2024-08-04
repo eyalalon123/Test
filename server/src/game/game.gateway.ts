@@ -42,10 +42,10 @@ export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewa
         this.server.to(room).emit('message', `${client} has left the room ${room}`);
     }
 
-    async handleChatMessage(content: string, receiverId: string, gameId: string, date: Date) {
+    async handleChatMessage(content: string, receiverId: string, gameId: string, date: Date, senderId: string) {
         this.logger.log(`new message send to ${receiverId}: ${content}`);
 
-        this.sendSocket(receiverId, "new-message", { gameId, content, date });
+        this.sendSocket(receiverId, "new-message", { gameId, content, date, senderId });
     }
 
     sendSocket(playerId: string, event: string, payload: Record<string, any> | string) {

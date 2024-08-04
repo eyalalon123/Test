@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSocket } from "./SocketContext";
+import { useUser } from "./UserContext";
 
 interface GameIdContext {
     gameId: string | undefined;
@@ -29,6 +30,10 @@ interface GameIdContext {
     intervalId: NodeJS.Timeout | undefined;
     chat: Message[];
     addMessage: (message: Message) => void;
+    newMessage: boolean;
+    setNewMessage: React.Dispatch<React.SetStateAction<boolean>>;
+    newMessageCount: number;
+    updateNewMessageCount: (count: number) => void;
 }
 
 export enum GameStatusEnum {
@@ -39,6 +44,7 @@ export enum GameStatusEnum {
 
 export type Message = {
     senderId: string,
+    gameId: string | undefined,
     content: string,
     date: Date
 }
@@ -53,6 +59,7 @@ export const useGame = () => {
 
 const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
     const socket = useSocket();
+    const { user } = useUser();
     const navigate = useNavigate();
 
     const [scoreP1, setScoreP1] = useState(0);
@@ -64,10 +71,12 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     const [opponentId, setOpponentId] = useState<string>();
     const [hasSubmitted, setHasSubmitted] = useState(false);
     const [inputs, setInputs] = useState(Array(9).fill(''));
+    const [newMessageCount, setNewMessageCount] = useState(0);
     const [chosenLetter, setChosenLetter] = useState<string>();
     const [createdName, setCreatedName] = useState<string>('');
     const [pointResults, setPointResults] = useState<number>(0);
     const [opponentName, setOpponentName] = useState<string>('');
+    const [newMessage, setNewMessage] = useState<boolean>(false);
     const [isNewRound, setIsNewRound] = useState<boolean>(false);
     const [gameStatus, setGameStatus] = useState<GameStatusEnum>();
     const [intervalId, setIntervalId] = useState<NodeJS.Timeout>();
@@ -87,13 +96,13 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         socket.on('start-game', handleStartGame);
         socket.on('invitation-for-game', handleInvitationForGame);
         socket.on('end-game', handleEndGame);
-        socket.on('new-message', addMessage);
+        socket.on('new-message', handleNewMessage);
 
         return () => {
             socket.off('start-game', handleStartGame);
             socket.off('invitation-for-game', handleInvitationForGame);
             socket.off('end-game', handleEndGame);
-            socket.off('new-message', addMessage);
+            socket.off('new-message', handleNewMessage);
         };
     }, [socket, navigate, intervalId, gameId]);
 
@@ -123,6 +132,22 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
         setScoreP2(resultsP2)
     };
 
+    const handleNewMessage = (message: Message) => {
+        addMessage(message);
+        if (message.senderId !== user?._id) {
+            setNewMessageCount(prevCount => {
+                const newCount = prevCount + 1;
+                updateNewMessageCount(newCount);
+                return newCount;
+            });
+        }
+    };
+
+    const updateNewMessageCount = (count: number) => {
+        setNewMessageCount(count);
+        setNewMessage(count > 0);
+    };
+
     const addMessage = (message: Message) => {
         setChat(prev => {
             const chat: Message[] = JSON.parse(JSON.stringify(prev))
@@ -130,6 +155,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
             return chat;
         })
     }
+
 
     const startGame = (randomLetter: string, gameId: string, opponentId: string) => {
         setGameStatus(GameStatusEnum.InProgress);
@@ -166,7 +192,7 @@ const GameProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) =>
     }, [intervalId]);
 
     return (
-        <GameContext.Provider value={{ addMessage, chat, intervalId, hasSubmitted, setHasSubmitted, pointResults, setShowResultsAfterGame, showResultsAfterGame, setShowEndGamePopup, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
+        <GameContext.Provider value={{ updateNewMessageCount, newMessageCount, newMessage, setNewMessage, addMessage, chat, intervalId, hasSubmitted, setHasSubmitted, pointResults, setShowResultsAfterGame, showResultsAfterGame, setShowEndGamePopup, setPointResults, setInputs, inputs, createdName, opponentName, setResults, results, scoreP1, scoreP2, startGame, timeLeft, gameId, showEndGamePopup, isNewRound, opponentId, chosenLetter, gameStatus }}>
             {children}
         </GameContext.Provider>
     );
