@@ -134,7 +134,7 @@ const SinglePlayer: React.FC = () => {
                                 className={results[index] === true ? "true-answer" :
                                     results[index] === false ? "false-answer" : "reset-answer"
                                 }
-                                disabled={timeLeft === 0}
+                                // disabled={timeLeft === 0}
                                 value={playerAnswer}
                                 onChange={(e) => handleInputChange(index, e.target.value)}
                             />

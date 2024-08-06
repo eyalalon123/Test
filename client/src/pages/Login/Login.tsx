@@ -15,6 +15,7 @@ const Login = () => {
     const { login, fetchStatus, isLoggedIn } = useUser();
 
     const [formData, setFormData] = useState<User>({ phoneNumber: "", password: "" });
+    const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [error, setError] = useState<string>("");
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +38,10 @@ const Login = () => {
         });
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
     if (fetchStatus === "pending") {
         return null;
     }
@@ -51,6 +56,7 @@ const Login = () => {
                 <h1 className="title">ארץ עיר</h1>
                 <div className="login_inputs_container">
                     <input
+                        type={"tel"}
                         required
                         name="phoneNumber"
                         placeholder="הכנס מספר פלאפון"
@@ -59,16 +65,25 @@ const Login = () => {
                         onChange={handleInputChange}
                         value={formData.phoneNumber}
                     />
-                    <input
-                        required
-                        name="password"
-                        type="password"
-                        placeholder="הכנס סיסמא"
-                        className="code_input"
-                        maxLength={20}
-                        onChange={handleInputChange}
-                        value={formData.password}
-                    />
+                    <div className="password_container">
+                        <input
+                            required
+                            name="password"
+                            type={passwordVisible ? "text" : "password"}
+                            placeholder="הכנס סיסמא"
+                            className="code_input"
+                            maxLength={20}
+                            onChange={handleInputChange}
+                            value={formData.password}
+                        />
+                        <button
+                            type="button"
+                            className="password_toggle"
+                            onClick={togglePasswordVisibility}
+                        >
+                            {passwordVisible ? "🙈" : "👁️"}
+                        </button>
+                    </div>
                     {error && <div className="error_message">{error}</div>}
                     <button className="login_button" onClick={handleSubmit}>התחברות</button>
                     <button className="login_button" onClick={() => navigate('/register')}>הרשמה</button>

@@ -14,8 +14,10 @@ interface User {
 
 const RegisterPage = () => {
     const [formData, setFormData] = useState<User>({ name: "", phoneNumber: "", password: "" });
-    const navigate = useNavigate();
+    const [passwordVisible, setPasswordVisible] = useState<boolean>(false);
     const [showText, setShowText] = useState<Boolean>(false);
+
+    const navigate = useNavigate();
 
     const { refetch } = useQuery({
         queryKey: ["users"],
@@ -39,6 +41,10 @@ const RegisterPage = () => {
         }));
     };
 
+    const togglePasswordVisibility = () => {
+        setPasswordVisible(!passwordVisible);
+    };
+
     const handleSubmit = () => {
         mutate(formData);
     };
@@ -49,6 +55,10 @@ const RegisterPage = () => {
 
     return (
         <div className="home-page-container">
+            <div className="title">
+                <h2>הרשמה</h2>
+                <p>זה פשוט וקל</p>
+            </div>
             <div className="input-fields">
                 <input
                     type="text"
@@ -59,21 +69,30 @@ const RegisterPage = () => {
                     onChange={handleInputChange}
                 />
                 <input
-                    type="text"
+                    type={"tel"}
                     name="phoneNumber"
                     placeholder="מספר פלאפון"
                     maxLength={10}
                     value={formData.phoneNumber}
                     onChange={handleInputChange}
                 />
-                <input
-                    type="password"
-                    name="password"
-                    placeholder="סיסמא"
-                    maxLength={20}
-                    value={formData.password}
-                    onChange={handleInputChange}
-                />
+                <div className="password_container">
+                    <input
+                        type={passwordVisible ? "text" : "password"}
+                        name="password"
+                        placeholder="סיסמא"
+                        maxLength={20}
+                        value={formData.password}
+                        onChange={handleInputChange}
+                    />
+                    <button
+                        type="button"
+                        className="password_toggle"
+                        onClick={togglePasswordVisibility}
+                    >
+                        {passwordVisible ? "🙈" : "👁️"}
+                    </button>
+                </div>
                 <img onClick={handleShowText} src="src/images/info_Icon.png" alt="info" className="info-icon" />
                 {isError && <p className="error-data">שגיאה בנתונים</p>}
                 {showText &&

@@ -14,19 +14,42 @@
     border-radius: 8px;
     animation: fadeIn 1s ease-in-out;
 
+    .title {
+        height: 20%;
+        text-align: center;
+        font-weight: 600;
+        font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    }
 
     .input-fields {
-        width: 30%;
-        height: 70%;
+        width: 40%;
         display: flex;
         flex-direction: column;
         align-items: center;
-        justify-content: center;
+        margin-top: 5%;
         gap: 10px;
+
+        .password_container {
+            position: relative;
+            height: 10%;
+            width: 100%;
+
+            .password_toggle {
+                height: 0;
+                width: 0;
+                position: absolute;
+                right: 6%;
+                top: 8%;
+                transform: translateY(-50%);
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-size: 1.2em;
+            }
+        }
 
         input {
             width: 100%;
-            max-height: 10%;
             padding: 10px;
             border: 1px solid #888888;
             border-radius: 4px;
@@ -35,6 +58,7 @@
             background-color: #c5c5c5;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
+
 
         input:focus {
             border-color: #424242;
@@ -48,6 +72,22 @@
         height: 16px;
         cursor: pointer;
         transition: transform 0.3s ease;
+    }
+
+    .info-icon:hover+.text-icon-container {
+        display: block;
+    }
+
+    .text-icon-container {
+        height: 30%;
+        background-color: rgba(255, 255, 255, 0.9);
+
+        p {
+            display: flex;
+            flex-direction: column;
+            max-height: 30%;
+            direction: rtl;
+        }
     }
 
     .button-handle-users {
@@ -73,23 +113,6 @@
         text-align: center;
         color: red;
     }
-
-    .info-icon:hover+.text-icon-container {
-        display: block;
-    }
-
-    .text-icon-container {
-        height: 25%;
-        background-color: rgba(255, 255, 255, 0.9);
-
-        p {
-            display: flex;
-            font-size: small;
-            flex-direction: column;
-            max-height: 30%;
-            direction: rtl;
-        }
-    }
 }
 
 @media screen and (max-width: 500px) {
@@ -107,14 +130,44 @@
         border-radius: 8px;
         animation: fadeIn 1s ease-in-out;
 
+        .title {
+            height: 20%;
+            text-align: center;
+            font-weight: 600;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+            h2,
+            p {
+                height: 50%;
+            }
+        }
 
         .input-fields {
             width: 90%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            margin-top: 20%;
             gap: 10px;
+
+            .password_container {
+                position: relative;
+                height: 10%;
+                width: 100%;
+
+                .password_toggle {
+                    height: 0;
+                    width: 0;
+                    position: absolute;
+                    right: 12%;
+                    top: 10%;
+                    transform: translateY(-50%);
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                    font-size: 1.2em;
+                }
+            }
 
             input {
                 width: 100%;
@@ -126,6 +179,7 @@
                 background-color: #c5c5c5;
                 transition: border-color 0.3s ease, box-shadow 0.3s ease;
             }
+
 
             input:focus {
                 border-color: #424242;
@@ -146,7 +200,7 @@
         }
 
         .text-icon-container {
-            height: 20%;
+            height: 30%;
             background-color: rgba(255, 255, 255, 0.9);
 
             p {
