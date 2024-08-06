@@ -108,6 +108,7 @@ const SinglePlayer: React.FC = () => {
             return
         };
         submitAnswers({ answers: playerAnswers, letter: chosenLetter });
+        setTimeLeft(0);
         if (intervalId) clearInterval(intervalId);
     };
 

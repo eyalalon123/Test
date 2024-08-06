@@ -1,5 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { BadRequestException, Injectable } from '@nestjs/common';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 import { Model } from 'mongoose';
 
@@ -29,6 +30,7 @@ export class GameRoomService {
                 idP1: playerId,
                 idP2: opponentId,
                 gameStatus: GameStatusEnum.Pending,
+                createdAt: new Date()
             }
             const user1 = await this.authService.getUserById(playerId);
             const createdName = user1.user.name
@@ -60,9 +62,7 @@ export class GameRoomService {
     }
 
     async endGame(endGameDTO: EndGameDTO) {
-
         const { gameId, playerId, answers, letter } = endGameDTO;
-
 
         try {
             // get results 
@@ -234,4 +234,23 @@ export class GameRoomService {
         }
     }
 
+    async deleteOldPendingGames() {
+        try {
+            const oneMinuteAgo = new Date(Date.now() - 1 * 60 * 1000);
+            // Find game rooms that are pending and created more than 1 minute ago
+            const result = await this.gameRoomModel.deleteMany({
+                gameStatus: GameStatusEnum.Pending,
+                createdAt: { $lt: oneMinuteAgo },
+            });
+            console.log(`Deleted ${result.deletedCount} old pending game rooms.`);
+        } catch (err) {
+            console.error('Error deleting old pending game rooms:', err);
+        }
+    }
+
+    @Cron('*/5 * * * *') // Runs every 5 minutes
+    handleCron() {
+        console.log('Cron job triggered at:', new Date());
+        this.deleteOldPendingGames();
+    }
 }

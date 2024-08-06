@@ -68,7 +68,7 @@ const AddWords: React.FC = () => {
             {addWordPopup && <AddWordPopup setAddWordPopup={setAddWordPopup} />}
             <div className="add-words-container">
                 <div className='arrow-back-container'>
-                    <ArrowBackIcon className='arrow-back-icon' onClick={() => navigate(-1)} />
+                    <ArrowBackIcon className='arrow-back-icon' onClick={() => navigate('/home')} />
                 </div>
                 <h2>הוסף מילה חדשה</h2>
                 <form onSubmit={handleAddWord}>

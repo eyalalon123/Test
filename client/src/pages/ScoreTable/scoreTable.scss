@@ -9,14 +9,15 @@
     direction: rtl;
 
     .arrow-back-container {
-        height: 0%;
-        width: 100%;
-        direction: ltr;
+        height: 5%;
+        width: 10%;
+        position: absolute;
+        right: 96%;
+        top: 5%;
+    }
 
-        .arrow-back-icon {
-            margin: 2% 0 0 1%;
-            cursor: pointer;
-        }
+    .arrow-back-icon {
+        cursor: pointer;
     }
 
 
@@ -93,9 +94,11 @@
         direction: rtl;
 
         .arrow-back-container {
-            .arrow-back-icon {
-                margin: 5% 0 0 2%;
-            }
+            height: 5%;
+            width: 10%;
+            position: absolute;
+            right: 92%;
+            top: 3%;
         }
 
         .score-table-list {

@@ -25,6 +25,11 @@ export class AuthService {
             throw new BadRequestException('User with the same name already exists');
         }
 
+        const isPhoneNumberExist = await this.AuthModule.findOne({ phoneNumber: phoneNumber });
+        if (isPhoneNumberExist) {
+            throw new BadRequestException('User with the same phoneNumber already exists');
+        }
+
         try {
             await this.AuthModule.create({
                 name,
@@ -46,14 +51,8 @@ export class AuthService {
         const isPasswordMatched = await bcrypt.compare(password, user.password)
         if (!isPasswordMatched) throw new UnauthorizedException('Invalid phone number or password');
 
-        //better, shorter, and a more scaleable solution below (NS)
-        // if(!user || !(await bcrypt.compare(password, user.password))) {
-        //     throw new UnauthorizedException('Invalid phone number or password');
-        // }
-
         const token = this.JwtService.sign({ id: user._id, });
 
-        //don't call the token cookie 'token', it is too easy for hackers to know to steel this cookie (NS)
         res.cookie('token', token, {
             maxAge: parseFloat(process.env.JWT_EXPIRES.replace("d", "")) * 24 * 60 * 60 * 1000
         })
@@ -70,7 +69,6 @@ export class AuthService {
         //accidently return passwords to the user.... (NS)
         return { user: await this.AuthModule.findById(id) }
     }
-
 
     async signInUserByToken(token?: string) {
         try {

@@ -34,7 +34,8 @@ export const InvitationPopup: React.FC<InvitationPopupProps> = ({ setPopUp, game
         <div className="invitation-popup-overlay" onClick={() => setPopUp(false)}>
             <div className="invitation-popup" onClick={(e) => e.stopPropagation()}>
                 <div className="popup-container">
-                    <p>הזמין אותך למשחק {opponentName}</p>
+                    <p>{opponentName}</p>
+                    <p>הזמין אותך למשחק</p>
                     <button className="confirm-invitation-button" onClick={handleStartGame}>אישור</button>
                     <button className="cancel-invitation-button" onClick={() => setPopUp(false)}>ביטול</button>
                 </div>

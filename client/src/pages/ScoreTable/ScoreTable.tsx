@@ -52,6 +52,10 @@ const ScoreTable = () => {
         }
     };
 
+    const extractNumbers = (result: { [key: string]: number }) => {
+        return Object.values(result).reverse().filter(value => typeof value === 'number').join(' - ');
+    };
+
     return (
         <>
             {noResultsPopup && <NoResultsPopup setNoResultsPopup={setNoResultsPopup} />}
@@ -73,6 +77,7 @@ const ScoreTable = () => {
                                             <span className="draw">Draw</span> :
                                             <span className="lose">{game.opponentName} ניצח</span>)}
                                 </p>
+                                <p>תוצאה סופית: {extractNumbers(game.scores)}</p>
                             </div>
                         </li>
                     ))}

@@ -4,8 +4,8 @@ export class registerDTO {
 
     @IsNotEmpty()
     @Length(3, 20)
-    @Matches(/^[a-zA-Z]+$/, {
-        message: 'Name must consist of letters only'
+    @Matches(/^[a-zA-Zא-ת]+$/, {
+        message: 'Name must consist of English and/or Hebrew letters only'
     })
     name: string;
 

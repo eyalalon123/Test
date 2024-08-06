@@ -44,5 +44,8 @@ export class GameRoom {
 
     @Prop({ type: [Message] })
     chat: Message[];
+
+    @Prop({ type: Date, default: Date.now })
+    createdAt: Date;
 }
 export const GameRoomSchema = SchemaFactory.createForClass(GameRoom);

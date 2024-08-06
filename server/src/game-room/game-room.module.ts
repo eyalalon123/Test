@@ -1,5 +1,6 @@
 import { MongooseModule } from '@nestjs/mongoose';
 import { Module } from '@nestjs/common';
+import { ScheduleModule } from '@nestjs/schedule';
 
 import { GameRoom, GameRoomSchema } from './schemas/game-room.schema';
 import { GameRoomController } from './game-room.controller';
@@ -17,6 +18,7 @@ import { CategoriesModule } from 'src/categories/categories.module';
     AuthModule,
     CategoriesModule,
     GameGatewayModule,
+    ScheduleModule.forRoot()
   ],
   controllers: [GameRoomController],
   providers: [GameRoomService],

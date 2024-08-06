@@ -1,27 +1,39 @@
-import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import axios from 'axios';
 
 import EmptyErrorPopup from '../GenericPopup/EmptyErrorPopup';
+import InvitationPopup from '../GenericPopup/InvitationPopup';
+
 import { useUser } from '../../common/context/UserContext';
+import { useGame } from '../../common/context/GameContext';
+import { useSocket } from '../../common/context/SocketContext';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import './lobbyPage.scss';
 
 const LobbyPage = () => {
+    const socket = useSocket();
     const { user } = useUser();
+    const { gameId } = useGame();
     const navigate = useNavigate()
 
     const [emptyErrorPopup, setEmptyErrorPopup] = useState<boolean>(false)
+    const [popupJoinRoom, setPopupJoinRoom] = useState(false);
     const [rivalUsername, setRivalUsername] = useState('');
+
+    socket?.on('invitation-for-game', () => {
+        setPopupJoinRoom(true);
+    });
 
     const invitePlayer = async () => {
         if (!rivalUsername.trim()) {
             setEmptyErrorPopup(true)
             return;
         }
+        if (rivalUsername === user?.name) return;
         try {
             await axios.post('/api/game-room', {
                 playerId: user?._id,
@@ -52,6 +64,10 @@ const LobbyPage = () => {
                     <button className="join-game-button" onClick={invitePlayer}>הזמן למשחק</button>
                 </div>
             </div>
+            {
+                popupJoinRoom &&
+                <InvitationPopup gameId={gameId} setPopUp={setPopupJoinRoom} />
+            }
         </>
     );
 };
