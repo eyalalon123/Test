@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useGame } from '../../common/context/GameContext';
 
-import { useUser } from '../../common/context/UserContext';
-import { useSocket } from '../../common/context/SocketContext';
+import { useUser } from '../../common/context/userContext';
+import { useSocket } from '../../common/context/socketContext';
 
 import InvitationPopup from '../GenericPopup/InvitationPopup';
 
@@ -21,7 +21,7 @@ const HomePage = () => {
         navigate('/single-player')
     }
 
-    socket?.on('invitation-for-game', () => {
+    socket?.on('invitation-for-game', () => {        
         setPopupJoinRoom(true);
     });
 

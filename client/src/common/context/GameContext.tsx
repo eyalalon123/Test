@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSocket } from "./SocketContext";
-import { useUser } from "./UserContext";
+import { useSocket } from "./socketContext";
+import { useUser } from "./userContext";
 
 interface GameIdContext {
     gameId: string | undefined;

@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { useQuery, useMutation } from "@tanstack/react-query";
 
-import "./registerPage.scss";
+import "./RegisterPage.scss";
 
 interface User {
     name: string;

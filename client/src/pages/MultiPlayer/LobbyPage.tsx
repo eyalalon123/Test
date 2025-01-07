@@ -6,9 +6,9 @@ import axios from 'axios';
 import EmptyErrorPopup from '../GenericPopup/EmptyErrorPopup';
 import InvitationPopup from '../GenericPopup/InvitationPopup';
 
-import { useUser } from '../../common/context/UserContext';
+import { useUser } from '../../common/context/userContext';
 import { useGame } from '../../common/context/GameContext';
-import { useSocket } from '../../common/context/SocketContext';
+import { useSocket } from '../../common/context/socketContext';
 
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 

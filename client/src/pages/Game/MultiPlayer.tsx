@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
 
-import { useUser } from '../../common/context/UserContext';
+import { useUser } from '../../common/context/userContext';
 import { useGame } from '../../common/context/GameContext';
 
 import ChatIcon from '../Chatbox/ChatIcon';

@@ -5,10 +5,10 @@ import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { useGame } from "../../common/context/GameContext";
-import { useUser } from "../../common/context/UserContext";
+import { useUser } from "../../common/context/userContext";
 import NoResultsPopup from "../GenericPopup/NoResultsPopup";
 import InvitationPopup from "../GenericPopup/InvitationPopup";
-import { useSocket } from "../../common/context/SocketContext";
+import { useSocket } from "../../common/context/socketContext";
 
 import "./scoreTable.scss";
 

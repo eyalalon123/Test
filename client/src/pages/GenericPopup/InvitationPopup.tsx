@@ -2,7 +2,7 @@ import React from 'react';
 
 import axios from 'axios';
 
-import { useUser } from '../../common/context/UserContext';
+import { useUser } from '../../common/context/userContext';
 import { useGame } from '../../common/context/GameContext';
 
 import './invitationPopup.scss';
@@ -16,7 +16,7 @@ export const InvitationPopup: React.FC<InvitationPopupProps> = ({ setPopUp, game
     const { user } = useUser();
     const { opponentName } = useGame()
 
-    const handleStartGame = () => {
+    const handleStartGame = () => {        
         if (!user || !gameId) return;
         setPopUp(false);
         try {

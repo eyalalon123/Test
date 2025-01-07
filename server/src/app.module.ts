@@ -19,7 +19,7 @@ import { GameGatewayModule } from './game/game.module';
     TestsModule,
     GameRoomModule,
     CategoriesModule,
-    MongooseModule.forRoot("mongodb://127.0.0.1/nestjs_tutorial"),
+    MongooseModule.forRoot("mongodb://192.168.1.9:27017/nestjs_tutorial"),
   ],
   controllers: [AppController],
   providers: [AppService, GameGatewayModule],

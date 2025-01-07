@@ -5,7 +5,7 @@ import axios from "axios";
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import { useGame } from "../../common/context/GameContext";
-import { useSocket } from "../../common/context/SocketContext";
+import { useSocket } from "../../common/context/socketContext";
 
 import AddWordPopup from "../GenericPopup/AddWordPopup";
 import InvitationPopup from "../GenericPopup/InvitationPopup";

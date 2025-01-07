@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 
-import SocketProvider from "./context/SocketContext";
+import SocketProvider from "./context/socketContext";
 import GameProvider from "./context/GameContext";
 
 const ContextManager: React.FC = () => {

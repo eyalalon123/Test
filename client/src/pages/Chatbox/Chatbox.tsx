@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 
 import { useGame } from '../../common/context/GameContext';
-import { useUser } from '../../common/context/UserContext';
+import { useUser } from '../../common/context/userContext';
 
 import './chatbox.scss'
 

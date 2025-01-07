@@ -4,7 +4,7 @@ import { useMutation, useQuery } from '@tanstack/react-query';
 
 import axios from 'axios';
 
-import { useUser } from '../../common/context/UserContext';
+import { useUser } from '../../common/context/userContext';
 
 import { CATEGORIES, HEBREW_LETTERS } from './game.consts';
 import ErrorPopup from '../GenericPopup/ErrorPopup';
