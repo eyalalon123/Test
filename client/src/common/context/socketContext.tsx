@@ -14,15 +14,8 @@ const SocketProvider: React.FC<{ children?: React.ReactNode }> = ({ children }) 
     const createSocketConnection = useMemo(() => {
         if (!user) return null;
 
-        const isLocalhost = window.location.hostname === "localhost";
-        const localIpPattern = /^192\.168\.0\.\d+$/;
-        const isLocalNetwork = localIpPattern.test(window.location.hostname);
-
-        const domain = isLocalhost
-            ? "http://localhost:8000"
-            : isLocalNetwork
-                ? `http://${window.location.hostname}:8000`
-                : "";
+        const serverIp = "10.0.0.27";
+        const domain = `http://${serverIp}:8000`;
 
         try {
             const newSocket = io(domain, {

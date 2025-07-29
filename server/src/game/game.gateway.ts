@@ -5,14 +5,10 @@ import { Message } from 'src/game-room/schemas/game-room.schema';
 
 @WebSocketGateway({
     cors: {
-      origin: [
-        'http://localhost:5000', 
-        /^http:\/\/192\.168\.1\.\d+:5000$/,
-        /^http:\/\/172\.20\.98\.\d+:5000$/,
-      ],
-      credentials: true,
+        origin: true,
+        credentials: true,
     },
-  })  
+})
 
 export class GameGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     @WebSocketServer() server: Server;
